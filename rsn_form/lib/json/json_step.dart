@@ -1,20 +1,26 @@
-class JsonStep {
+import 'dart:collection';
 
+import 'package:rsn_form/utility/make_step.dart';
+
+class JsonStep {
   String title;
   String question;
-  String answerType;
+  AnswerType answerType;
   int step;
-  List<String> possibileAnswers;
+  LinkedHashMap<String, String> possibileAnswers;
 
-  JsonStep(this.title, this.question, this.answerType, this.step, this.possibileAnswers);
+  JsonStep(this.title, this.question, this.answerType, this.step,
+      this.possibileAnswers);
 
   JsonStep.fromMap(Map<String, dynamic> map) {
-    possibileAnswers = List<String>();
+    possibileAnswers = LinkedHashMap<String, String>();
     this.title = map['title'];
     this.question = map['question'];
     this.answerType = map['answerType'];
     this.step = map['step'];
-    for(int i = 0; i < map['answers'].length; i++){
-      possibileAnswers.add(map['answers'][i]);
-    }
+    map['answers'].forEach((e) => {
+          possibileAnswers.putIfAbsent(
+              e['answer'].toString(), () => e['value'].toString())
+        });
+  }
 }
