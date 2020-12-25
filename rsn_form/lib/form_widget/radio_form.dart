@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:rsn_form/rsn_stepper.dart';
 
 class RadioForm {
-  final TextEditingController controller;
   final String question;
   final Map<String, String> values;
   String selectedValue;
+  BuildContext context;
 
   RadioForm(
       {Key key,
-      @required this.controller,
       @required this.question,
       @required this.values,
+      @required this.context,
       this.selectedValue});
 
   List<Widget> getWidgets() {
@@ -24,9 +25,8 @@ class RadioForm {
               title: Text(key),
               value: v,
               groupValue: selectedValue,
-              onChanged: (String value) {
-                selectedValue = value;
-              },
+              onChanged: (String value) =>
+                  RsnStepper.of(context).setState(() => selectedValue = value),
             ),
           );
         });

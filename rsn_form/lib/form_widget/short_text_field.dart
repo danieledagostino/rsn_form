@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ShortTextField {
-  final TextEditingController controller;
+  final TextEditingController controller = TextEditingController();
   final String question;
 
-  ShortTextField({Key key, @required this.controller, this.question});
+  ShortTextField({Key key, @required this.question});
 
   List<Widget> getWidgets() {
     return <Widget>[

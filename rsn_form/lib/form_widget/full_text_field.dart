@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class FullTextField {
-  final TextEditingController controller;
+  final TextEditingController controller = TextEditingController();
   final String question;
 
-  FullTextField({Key key, @required this.controller, this.question});
+  FullTextField({Key key, @required this.question});
 
   List<Widget> getWidgets() {
     return <Widget>[
