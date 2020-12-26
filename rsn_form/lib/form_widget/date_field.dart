@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
-import 'package:rsn_form/rsn_stepper.dart';
+import 'package:rsn_form/pages/rsn_stepper.dart';
 
 class DateField {
   final TextEditingController controller = TextEditingController();

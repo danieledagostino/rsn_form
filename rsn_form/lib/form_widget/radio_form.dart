@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rsn_form/rsn_stepper.dart';
+import 'package:rsn_form/pages/rsn_stepper.dart';
 
 class RadioForm {
   final String question;
