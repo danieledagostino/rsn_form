@@ -37,22 +37,35 @@ class _RsnStepperState extends State<RsnStepper> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    steps = makeStep.steps(context);
     return new Scaffold(
         appBar: AppBar(
           title: Text('RSN Form'),
         ),
-        body: Column(children: <Widget>[
-          Expanded(
-            child: Stepper(
-              steps: steps,
-              currentStep: currentStep,
-              onStepContinue: next,
-              onStepTapped: (step) => goTo(step),
-              onStepCancel: cancel,
-            ),
-          ),
-        ]));
+        body: FutureBuilder<String>(
+            future: makeStep.getResources(), // function where you call your api
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              // AsyncSnapshot<Your object type>
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: Text('Please wait its loading...'));
+              } else {
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  steps = makeStep.steps(context);
+                  return Column(children: <Widget>[
+                    Expanded(
+                      child: Stepper(
+                        steps: steps,
+                        currentStep: currentStep,
+                        onStepContinue: next,
+                        onStepTapped: (step) => goTo(step),
+                        onStepCancel: cancel,
+                      ),
+                    ),
+                  ]);
+                }
+              } // snapshot.data  :- get your object which is pass from your downloadData() function
+            }));
   }
 
   next() {
