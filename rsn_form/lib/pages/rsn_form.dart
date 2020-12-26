@@ -49,7 +49,7 @@ class _RsnFormState extends State<RsnForm> with WidgetsBindingObserver {
               steps: steps,
               currentStep: currentStep,
               onStepContinue: next,
-              onStepTapped: (step) => goTo(step),
+              //onStepTapped: (step) => goTo(step),
               onStepCancel: cancel,
             ),
           ),
