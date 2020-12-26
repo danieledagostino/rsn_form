@@ -16,9 +16,11 @@ class JsonStep {
     this.question = map['question'];
     this.answerType = map['answerType'];
     this.step = map['step'];
-    map['answers'].forEach((e) => {
-          possibileAnswers.putIfAbsent(
-              e['answer'].toString(), () => e['value'].toString())
-        });
+    if (map['answers'] != null) {
+      map['answers'].forEach((e) => {
+            possibileAnswers.putIfAbsent(
+                e['answer'].toString(), () => e['value'].toString())
+          });
+    }
   }
 }
