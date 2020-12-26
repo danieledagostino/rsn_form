@@ -92,7 +92,7 @@ class MakeStep {
   List<Step> steps(BuildContext context) {
     List<Step> steps = List<Step>();
 
-    jsonSteps.map((e) => {steps.add(nextStep(e, context))});
+    jsonSteps.forEach((e) => {steps.add(nextStep(e, context))});
     return steps;
   }
 }
