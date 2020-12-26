@@ -15,7 +15,7 @@ void main() {
 
       MakeStep makeStep = MakeStep.test(restJson);
 
-      List<Step> steps = makeStep.steps(null);
+      List<Step> steps = makeStep.steps(null, 0);
     });
   });
 }

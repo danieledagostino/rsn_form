@@ -19,16 +19,15 @@ class MakeStep {
     } catch (err) {}
   }
 
-  MakeStep();
+  MakeStep(this.jsonSteps);
 
-  Future<String> getResources() async {
+  static Future<List<JsonStep>> getResources() async {
     final String url =
         'https://drive.google.com/uc?id=1NVLzrw72fD02AmumzTzKkg410bbs84Pt';
     var res = await http.get(url);
     if (res.statusCode == 200) {
       final restJson = json.decode(res.body);
-      jsonSteps = restJson.map<JsonStep>((m) => JsonStep.fromMap(m)).toList();
-      return Future.value("Data download successfully");
+      return restJson.map<JsonStep>((m) => JsonStep.fromMap(m)).toList();
     } else {
       print("resource not available: " + res.statusCode.toString());
       exit(1);
@@ -41,12 +40,22 @@ class MakeStep {
     Step step = Step(
       title: Text(jsonStep.title),
       isActive: true,
-      state: (currentStep > 1 ? StepState.disabled : StepState.editing),
+      state: getSepState(jsonStep, currentStep),
       content: Column(children: _makeWidgets(jsonStep)),
     );
 
     this.currentStep++;
     return step;
+  }
+
+  StepState getSepState(JsonStep jsonStep, int currentStep) {
+    if (jsonStep.step - 1 < currentStep) {
+      return StepState.complete;
+    } else if (jsonStep.step == currentStep) {
+      return StepState.editing;
+    } else {
+      return StepState.disabled;
+    }
   }
 
   List<Widget> _makeWidgets(JsonStep jsonStep) {
@@ -79,8 +88,9 @@ class MakeStep {
     return widgets;
   }
 
-  List<Step> steps(BuildContext context) {
+  List<Step> steps(BuildContext context, int currentStep) {
     List<Step> steps = List<Step>();
+    this.currentStep = currentStep;
 
     jsonSteps.forEach((e) => {steps.add(nextStep(e, context))});
     return steps;
