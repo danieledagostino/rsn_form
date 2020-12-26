@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:rsn_form/json/json_step.dart';
+import 'package:rsn_form/pages/rsn_form.dart';
 import 'package:rsn_form/utility/make_step.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -10,59 +12,31 @@ class RsnStepper extends StatefulWidget {
   _RsnStepperState createState() => _RsnStepperState();
 }
 
-class _RsnStepperState extends State<RsnStepper> with WidgetsBindingObserver {
-  MakeStep makeStep;
-  List<Step> steps;
+class _RsnStepperState extends State<RsnStepper> {
   bool _isButtonDisabled = true;
-
-  int currentStep = 0;
-  bool complete = false;
+  MakeStep makeStep;
+  List<JsonStep> jsonSteps;
 
   @override
   void initState() {
-    makeStep = MakeStep();
-
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached) {}
+    MakeStep.getResources().then((value) => {
+          setState(() {
+            _isButtonDisabled = false;
+            jsonSteps = value;
+          })
+        });
   }
 
   void _continueNavigation() {
     setState(() {
-      steps = makeStep.steps(context);
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Column(children: <Widget>[
-                    Expanded(
-                      child: Stepper(
-                        steps: steps,
-                        currentStep: currentStep,
-                        onStepContinue: next,
-                        onStepTapped: (step) => goTo(step),
-                        onStepCancel: cancel,
-                      ),
-                    ),
-                  ])));
+          context, MaterialPageRoute(builder: (context) => RsnForm(jsonSteps)));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    makeStep
-        .getResources()
-        .then((value) => {setState(() => _isButtonDisabled = false)});
-
     return new Scaffold(
         appBar: AppBar(
           title: Text('RSN Form'),
@@ -79,7 +53,7 @@ class _RsnStepperState extends State<RsnStepper> with WidgetsBindingObserver {
                         padding: EdgeInsets.all(8),
                         child: Text(snapshot.data,
                             style: TextStyle(fontSize: 18))),
-                    FlatButton(
+                    RaisedButton(
                       child: Text('Continue'),
                       onPressed: _isButtonDisabled ? null : _continueNavigation,
                     )
@@ -87,21 +61,5 @@ class _RsnStepperState extends State<RsnStepper> with WidgetsBindingObserver {
                 }
               }
             }));
-  }
-
-  next() {
-    currentStep + 1 != steps.length
-        ? goTo(currentStep + 1)
-        : setState(() => complete = true);
-  }
-
-  cancel() {
-    if (currentStep > 0) {
-      goTo(currentStep - 1);
-    }
-  }
-
-  goTo(int step) {
-    setState(() => currentStep = step);
   }
 }

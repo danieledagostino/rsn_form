@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:rsn_form/rsn_stepper.dart';
+import 'package:rsn_form/pages/rsn_stepper.dart';
 
 void main() {
   const bool kReleaseMode =
