@@ -1,11 +1,9 @@
 import 'dart:collection';
 
-import 'package:rsn_form/utility/make_step.dart';
-
 class JsonStep {
   String title;
   String question;
-  AnswerType answerType;
+  String answerType;
   int step;
   LinkedHashMap<String, String> possibileAnswers;
 
