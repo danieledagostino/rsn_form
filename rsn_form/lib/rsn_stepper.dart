@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rsn_form/utility/make_step.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class RsnStepper extends StatefulWidget {
   static _RsnStepperState of(BuildContext context) =>
@@ -46,7 +47,22 @@ class _RsnStepperState extends State<RsnStepper> with WidgetsBindingObserver {
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               // AsyncSnapshot<Your object type>
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: Text('Please wait its loading...'));
+                return FutureBuilder<String>(
+                    future: rootBundle.loadString('resources/disclaimer.txt'),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      if (snapshot.hasError) {
+                        return Text(snapshot.error);
+                      } else {
+                        if (snapshot.hasData) {
+                          return Text(snapshot.data);
+                        } else {
+                          return Container(
+                            child: Text('Loading'),
+                          );
+                        }
+                      }
+                    });
               } else {
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
