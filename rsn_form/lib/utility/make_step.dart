@@ -7,7 +7,6 @@ import 'package:rsn_form/form_widget/full_text_field.dart';
 import 'package:rsn_form/form_widget/radio_form.dart';
 import 'package:rsn_form/form_widget/short_text_field.dart';
 import 'package:rsn_form/json/json_step.dart';
-import 'package:sync_http/sync_http.dart';
 
 class MakeStep {
   List<JsonStep> jsonSteps;
@@ -20,16 +19,7 @@ class MakeStep {
     } catch (err) {}
   }
 
-  MakeStep() {
-/*
-      final file = new File('resources/widget_conf.json');
-      Future<String> decodedJson = file.readAsString();
-      decodedJson.then((value) {
-        final restJson = json.decode(value);
-        jsonSteps = restJson.map<JsonStep>((m) => JsonStep.fromMap(m)).toList();
-      });
-    */
-  }
+  MakeStep();
 
   Future<String> getResources() async {
     final String url =
@@ -61,13 +51,13 @@ class MakeStep {
 
   List<Widget> _makeWidgets(JsonStep jsonStep) {
     List<Widget> widgets = List<Widget>();
-    if (jsonStep.answerType == AnswerType.full.toString()) {
+    if (jsonStep.answerType == AnswerType.full) {
       FullTextField field = FullTextField(question: jsonStep.question);
       widgets.addAll(field.getWidgets());
-    } else if (jsonStep.answerType == AnswerType.short.toString()) {
+    } else if (jsonStep.answerType == AnswerType.short) {
       ShortTextField field = ShortTextField(question: jsonStep.question);
       widgets.addAll(field.getWidgets());
-    } else if (jsonStep.answerType == AnswerType.radio.toString()) {
+    } else if (jsonStep.answerType == AnswerType.radio) {
       RadioForm radio = RadioForm(
           context: context,
           question: jsonStep.question,
@@ -97,4 +87,12 @@ class MakeStep {
   }
 }
 
-enum AnswerType { radio, check, combo, full, short, datetime, date }
+class AnswerType {
+  static String radio = 'radio';
+  static String check = 'check';
+  static String combo = 'combo';
+  static String full = 'full';
+  static String short = 'short';
+  static String datetime = 'datetime';
+  static String date = 'date';
+}
