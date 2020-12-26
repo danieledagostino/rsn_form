@@ -13,6 +13,7 @@ class RsnStepper extends StatefulWidget {
 class _RsnStepperState extends State<RsnStepper> with WidgetsBindingObserver {
   MakeStep makeStep;
   List<Step> steps;
+  bool _isButtonDisabled = true;
 
   int currentStep = 0;
   bool complete = false;
@@ -36,39 +37,13 @@ class _RsnStepperState extends State<RsnStepper> with WidgetsBindingObserver {
     if (state == AppLifecycleState.detached) {}
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: AppBar(
-          title: Text('RSN Form'),
-        ),
-        body: FutureBuilder<String>(
-            future: makeStep.getResources(), // function where you call your api
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              // AsyncSnapshot<Your object type>
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return FutureBuilder<String>(
-                    future: rootBundle.loadString('resources/disclaimer.txt'),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<String> snapshot) {
-                      if (snapshot.hasError) {
-                        return Text(snapshot.error);
-                      } else {
-                        if (snapshot.hasData) {
-                          return Text(snapshot.data);
-                        } else {
-                          return Container(
-                            child: Text('Loading'),
-                          );
-                        }
-                      }
-                    });
-              } else {
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else {
-                  steps = makeStep.steps(context);
-                  return Column(children: <Widget>[
+  void _continueNavigation() {
+    setState(() {
+      steps = makeStep.steps(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Column(children: <Widget>[
                     Expanded(
                       child: Stepper(
                         steps: steps,
@@ -78,9 +53,39 @@ class _RsnStepperState extends State<RsnStepper> with WidgetsBindingObserver {
                         onStepCancel: cancel,
                       ),
                     ),
+                  ])));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    makeStep
+        .getResources()
+        .then((value) => {setState(() => _isButtonDisabled = false)});
+
+    return new Scaffold(
+        appBar: AppBar(
+          title: Text('RSN Form'),
+        ),
+        body: FutureBuilder<String>(
+            future: rootBundle.loadString('resources/disclaimer.txt'),
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error);
+              } else {
+                if (snapshot.hasData) {
+                  return Column(children: [
+                    Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text(snapshot.data,
+                            style: TextStyle(fontSize: 18))),
+                    FlatButton(
+                      child: Text('Continue'),
+                      onPressed: _isButtonDisabled ? null : _continueNavigation,
+                    )
                   ]);
                 }
-              } // snapshot.data  :- get your object which is pass from your downloadData() function
+              }
             }));
   }
 
