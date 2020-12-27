@@ -5,7 +5,7 @@ class RadioForm {
   final String question;
   final Map<String, String> values;
   String selectedValue;
-  BuildContext context;
+  final BuildContext context;
 
   RadioForm(
       {Key key,
@@ -18,18 +18,17 @@ class RadioForm {
     List<Widget> list = List<Widget>();
 
     list.add(Text(question));
+    print(values);
 
-    values.forEach((key, v) => () {
-          list.add(
-            RadioListTile<String>(
-              title: Text(key),
-              value: v,
-              groupValue: selectedValue,
-              onChanged: (String value) =>
-                  RsnStepper.of(context).setState(() => selectedValue = value),
-            ),
-          );
-        });
+    values.forEach((k, v) => list.add(
+          RadioListTile<String>(
+            title: Text(k),
+            value: v,
+            groupValue: selectedValue,
+            onChanged: (String value) =>
+                RsnStepper.of(context).setState(() => selectedValue = value),
+          ),
+        ));
 
     return list;
   }
