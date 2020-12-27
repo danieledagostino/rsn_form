@@ -35,7 +35,8 @@ dependencies:
   test: ^1.15.7
   date_field: ^0.3.3
   sync_http: ^0.2.0
-  
+  logger: ^0.9.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -54,6 +55,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
    - resources/disclaimer.txt
+   - test_resources/widget_conf.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
