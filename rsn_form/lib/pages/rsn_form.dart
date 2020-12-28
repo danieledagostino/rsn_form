@@ -76,7 +76,6 @@ class _RsnFormState extends State<RsnForm> with WidgetsBindingObserver {
   }
 */
   void next() {
-    Step step = steps[currentStep];
     if (currentStep + 1 > steps.length) {
       setState(() => {});
     } else {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ShortTextField {
-  final TextEditingController controller = TextEditingController();
   final String question;
 
   ShortTextField({Key key, @required this.question});
@@ -9,9 +8,11 @@ class ShortTextField {
   List<Widget> getWidgets() {
     return <Widget>[
       Text(question),
-      TextFormField(
+      TextField(
         autofocus: true,
-        controller: controller,
+        onSubmitted: (t) {
+          print('onSubmitted' + t);
+        },
       ),
     ];
   }

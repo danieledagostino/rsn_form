@@ -16,8 +16,7 @@ class DateField {
       DateTimeField(
         selectedDate: selectedDate,
         mode: DateFieldPickerMode.date,
-        onDateSelected: (DateTime date) =>
-            RsnStepper.of(context).setState(() => selectedDate = date),
+        onDateSelected: (DateTime date) => selectedDate = date,
         lastDate: DateTime(2021),
       ),
     ];

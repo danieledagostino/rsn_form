@@ -25,8 +25,7 @@ class RadioForm {
             title: Text(k),
             value: v,
             groupValue: selectedValue,
-            onChanged: (String value) =>
-                RsnStepper.of(context).setState(() => selectedValue = value),
+            onChanged: (String value) => selectedValue = value,
           ),
         ));
 

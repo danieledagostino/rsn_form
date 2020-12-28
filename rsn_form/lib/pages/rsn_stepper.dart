@@ -5,9 +5,6 @@ import 'package:rsn_form/utility/make_step.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class RsnStepper extends StatefulWidget {
-  static _RsnStepperState of(BuildContext context) =>
-      context.findAncestorStateOfType<_RsnStepperState>();
-
   @override
   _RsnStepperState createState() => _RsnStepperState();
 }
