@@ -3,7 +3,9 @@
         "title": "Name of mentor",
         "question": "Name of mentor",
         "answerType": "short",
-        "step": 1
+        "step": 1,
+        "mandatory": 1,
+        "regex":""
     },
     {
         "title": "Name of mentee",
