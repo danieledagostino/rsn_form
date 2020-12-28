@@ -51,11 +51,30 @@ class _RsnFormState extends State<RsnForm> with WidgetsBindingObserver {
               onStepContinue: next,
               //onStepTapped: (step) => goTo(step),
               onStepCancel: cancel,
+              //controlsBuilder: _controller(context),
             ),
           ),
         ]));
   }
 
+/*
+  ControlsWidgetBuilder _controller(BuildContext context) {
+    return ControlsWidgetBuilder(context, onStepCancel: () {
+      return Row(
+        children: <Widget>[
+          TextButton(
+            onPressed: next,
+            child: const Text('NEXT'),
+          ),
+          TextButton(
+            onPressed: cancel,
+            child: const Text('CANCEL'),
+          ),
+        ],
+      );
+    });
+  }
+*/
   void next() {
     Step step = steps[currentStep];
     if (currentStep + 1 > steps.length) {

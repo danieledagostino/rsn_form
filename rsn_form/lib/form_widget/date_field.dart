@@ -5,8 +5,8 @@ import 'package:rsn_form/pages/rsn_stepper.dart';
 class DateField {
   final TextEditingController controller = TextEditingController();
   final String question;
-  DateTime selectedDate;
-  BuildContext context;
+  DateTime selectedDate = DateTime.now();
+  final BuildContext context;
 
   DateField({Key key, @required this.context, @required this.question});
 
@@ -15,9 +15,10 @@ class DateField {
       Text(question),
       DateTimeField(
         selectedDate: selectedDate,
+        mode: DateFieldPickerMode.date,
         onDateSelected: (DateTime date) =>
             RsnStepper.of(context).setState(() => selectedDate = date),
-        lastDate: DateTime(2020),
+        lastDate: DateTime(2021),
       ),
     ];
   }

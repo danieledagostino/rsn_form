@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:rsn_form/form_widget/date_field.dart';
 import 'package:rsn_form/form_widget/full_text_field.dart';
 import 'package:rsn_form/form_widget/radio_form.dart';
 import 'package:rsn_form/form_widget/short_text_field.dart';
@@ -72,13 +73,15 @@ class MakeStep {
           question: jsonStep.question,
           values: jsonStep.possibileAnswers);
       widgets.addAll(radio.getWidgets());
+    } else if (jsonStep.answerType == AnswerType.date) {
+      DateField field =
+          DateField(context: context, question: jsonStep.question);
+      widgets.addAll(field.getWidgets());
     }
     /*
     else if (jsonStep.answerType == AnswerType.check) {
       widgets.addAll(Text(''));
     } else if (jsonStep.answerType == AnswerType.combo) {
-      widgets.addAll(Text(''));
-    } else if (jsonStep.answerType == AnswerType.date) {
       widgets.addAll(Text(''));
     } else if (jsonStep.answerType == AnswerType.datetime) {
       widgets.addAll(Text(''));

@@ -122,8 +122,8 @@
         "step": 10
     },
     {
-        "title": "Would you like RSN to contact you this week? ",
-        "question": "Would you like RSN to contact you this week? ",
+        "title": "Would you like RSN to contact you this week?",
+        "question": "Would you like RSN to contact you this week?",
         "answerType": "short",
         "step": 11,
         "answers": [
