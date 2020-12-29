@@ -1,3 +1,4 @@
+import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -13,6 +14,7 @@ class MakeStep {
   List<JsonStep> jsonSteps;
   int currentStep = 0;
   BuildContext context;
+  DateTimeField dateTimeField;
 
   MakeStep.test(final restJson) {
     try {
@@ -74,8 +76,8 @@ class MakeStep {
           values: jsonStep.possibileAnswers);
       widgets.addAll(radio.getWidgets());
     } else if (jsonStep.answerType == AnswerType.date) {
-      DateField field =
-          DateField(context: context, question: jsonStep.question);
+      DateField field = DateField(
+          child: dateTimeField, context: context, question: jsonStep.question);
       widgets.addAll(field.getWidgets());
     }
     /*
