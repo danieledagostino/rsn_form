@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:rsn_form/form_widget/super_widget.dart';
 
-class FullTextField extends StatelessWidget {
+class FullTextField extends SuperWidget {
   final TextEditingController controller = TextEditingController();
-  final String question;
 
-  FullTextField({Key key, @required this.question});
+  FullTextField({String question}) : super(question);
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Text(question),
-      TextFormField(
-        maxLines: 5,
-        autofocus: true,
-        controller: controller,
-      ),
-    ]);
+    List<Widget> list = getInitialWidgetList();
+    list.add(TextFormField(
+      maxLines: 5,
+      autofocus: true,
+      controller: controller,
+    ));
+    return Column(children: list);
   }
 }

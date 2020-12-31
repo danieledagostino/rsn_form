@@ -1,40 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:rsn_form/form_widget/super_widget.dart';
 
-class RadioForm extends StatelessWidget {
-  final String question;
+class RadioForm extends SuperWidget {
   final Map<String, String> values;
   ValueNotifier<String> selectedValue = ValueNotifier<String>('');
 
-  RadioForm(
-      {Key key,
-      @required this.question,
-      @required this.values,
-      String selectedValue}) {
+  RadioForm({String question, @required this.values, String selectedValue})
+      : super(question) {
     this.selectedValue.value = selectedValue;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Column(children: [
-      Text(question),
-      ListView.builder(
-          itemCount: values.length,
-          itemBuilder: (context, position) {
-            String k = values.keys.toList()[position];
-            String v = values.values.toList()[position];
-            return ValueListenableBuilder(
-                valueListenable: selectedValue,
-                builder:
-                    (BuildContext context, String newSelect, Widget child) {
-                  return RadioListTile(
-                      title: Text(k),
-                      groupValue: newSelect,
-                      onChanged: (value) => update(value),
-                      value: v);
-                });
-          })
-    ]));
+    List<Widget> list = getInitialWidgetList();
+    values.forEach((key, value) {
+      list.add(ValueListenableBuilder(
+          valueListenable: selectedValue,
+          builder: (BuildContext context, String newSelect, Widget child) {
+            return RadioListTile(
+                title: Text(key),
+                groupValue: newSelect,
+                onChanged: (v) => update(v),
+                value: value);
+          }));
+    });
+
+    return Column(children: list);
   }
 
   void update(String value) {

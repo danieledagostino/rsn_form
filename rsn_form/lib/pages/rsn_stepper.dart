@@ -3,6 +3,7 @@ import 'package:rsn_form/json/json_step.dart';
 import 'package:rsn_form/pages/rsn_form.dart';
 import 'package:rsn_form/utility/make_step.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/foundation.dart';
 
 class RsnStepper extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class _RsnStepperState extends State<RsnStepper> {
   @override
   void initState() {
     super.initState();
-    MakeStep.getResources().then((value) => {
+    MakeStep.getResources(isDebug: kDebugMode).then((value) => {
           setState(() {
             _isButtonDisabled = false;
             jsonSteps = value;
@@ -46,18 +47,21 @@ class _RsnStepperState extends State<RsnStepper> {
               } else {
                 if (snapshot.hasData) {
                   return Column(children: [
-                    SingleChildScrollView(
-                        child: Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(snapshot.data,
-                                style: TextStyle(fontSize: 18)))),
+                    Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text(snapshot.data,
+                            style: TextStyle(fontSize: 18))),
                     RaisedButton(
                       child: Text('Continue'),
                       onPressed: _isButtonDisabled ? null : _continueNavigation,
                     )
                   ]);
                 } else {
-                  return Text('Loading...');
+                  return Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.lightBlueAccent,
+                    ),
+                  );
                 }
               }
             }));

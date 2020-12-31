@@ -1,5 +1,6 @@
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -9,11 +10,14 @@ import 'package:rsn_form/form_widget/full_text_field.dart';
 import 'package:rsn_form/form_widget/radio_form.dart';
 import 'package:rsn_form/form_widget/short_text_field.dart';
 import 'package:rsn_form/json/json_step.dart';
+import 'package:logger/logger.dart';
 
 class MakeStep {
   List<JsonStep> jsonSteps;
   int currentStep = 0;
   DateTimeField dateTimeField;
+
+  static var logger = Logger();
 
   MakeStep.test(final restJson) {
     try {
@@ -23,17 +27,28 @@ class MakeStep {
 
   MakeStep(this.jsonSteps);
 
-  static Future<List<JsonStep>> getResources() async {
-    final String url =
-        'https://drive.google.com/uc?id=1NVLzrw72fD02AmumzTzKkg410bbs84Pt';
-    var res = await http.get(url);
-    if (res.statusCode == 200) {
-      final restJson = json.decode(res.body);
-      return restJson.map<JsonStep>((m) => JsonStep.fromMap(m)).toList();
+  static Future<List<JsonStep>> getResources({bool isDebug: false}) async {
+    String jsonContent;
+    if (isDebug) {
+      await rootBundle
+          .loadString('resources/widget_conf.json')
+          .then((value) => jsonContent = value)
+          .catchError(
+              (error) => {logger.e('Exception during widget_conf.json')});
     } else {
-      print("resource not available: " + res.statusCode.toString());
-      exit(1);
+      final String url =
+          'https://drive.google.com/uc?id=1NVLzrw72fD02AmumzTzKkg410bbs84Pt';
+      var res = await http.get(url);
+      if (res.statusCode == 200) {
+        jsonContent = res.body;
+      } else {
+        print("resource not available: " + res.statusCode.toString());
+        exit(1);
+      }
     }
+
+    final restJson = json.decode(jsonContent);
+    return restJson.map<JsonStep>((m) => JsonStep.fromMap(m)).toList();
   }
 
   Step nextStep(JsonStep jsonStep) {
