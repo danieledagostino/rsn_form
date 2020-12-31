@@ -1,34 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:rsn_form/pages/rsn_stepper.dart';
 
-class RadioForm {
+class RadioForm extends StatelessWidget {
   final String question;
   final Map<String, String> values;
-  String selectedValue;
-  final BuildContext context;
+  ValueNotifier<String> selectedValue = ValueNotifier<String>('');
 
   RadioForm(
       {Key key,
       @required this.question,
       @required this.values,
-      @required this.context,
-      this.selectedValue});
+      String selectedValue}) {
+    this.selectedValue.value = selectedValue;
+  }
 
-  List<Widget> getWidgets() {
-    List<Widget> list = List<Widget>();
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Column(children: [
+      Text(question),
+      ListView.builder(
+          itemCount: values.length,
+          itemBuilder: (context, position) {
+            String k = values.keys.toList()[position];
+            String v = values.values.toList()[position];
+            return ValueListenableBuilder(
+                valueListenable: selectedValue,
+                builder:
+                    (BuildContext context, String newSelect, Widget child) {
+                  return RadioListTile(
+                      title: Text(k),
+                      groupValue: newSelect,
+                      onChanged: (value) => update(value),
+                      value: v);
+                });
+          })
+    ]));
+  }
 
-    list.add(Text(question));
-    print(values);
-
-    values.forEach((k, v) => list.add(
-          RadioListTile<String>(
-            title: Text(k),
-            value: v,
-            groupValue: selectedValue,
-            onChanged: (String value) => selectedValue = value,
-          ),
-        ));
-
-    return list;
+  void update(String value) {
+    selectedValue.value = value;
   }
 }

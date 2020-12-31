@@ -1,36 +1,31 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 
-class DateField extends InheritedWidget {
-  final TextEditingController controller = TextEditingController();
+class DateField extends StatelessWidget {
   final String question;
-  DateTime selectedDate = DateTime.now();
-  final BuildContext context;
-  DateTimeField child;
+  ValueNotifier<DateTime> selectedDate = ValueNotifier(DateTime.now());
 
-  DateField(
-      {Key key, this.child, @required this.context, @required this.question})
-      : super(key: key, child: child);
-
-  static DateField of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<DateField>();
-  }
+  DateField({Key key, @required this.question});
 
   @override
-  bool updateShouldNotify(DateField oldWidget) {
-    return oldWidget.child != child;
-    //return true;
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Text(question),
+      ValueListenableBuilder(
+          valueListenable: selectedDate,
+          builder: (BuildContext context, DateTime newDate, Widget child) {
+            return DateTimeField(
+              selectedDate: newDate ?? DateTime.now(),
+              mode: DateFieldPickerMode.date,
+              onDateSelected: (DateTime date) => {update(date)},
+              lastDate: DateTime(2021),
+            );
+          })
+    ]);
   }
 
-  List<Widget> getWidgets() {
-    return <Widget>[
-      Text(question),
-      DateTimeField(
-        selectedDate: selectedDate,
-        mode: DateFieldPickerMode.date,
-        onDateSelected: (DateTime date) => {selectedDate = date},
-        lastDate: DateTime(2021),
-      ),
-    ];
+  void update(DateTime date) {
+    selectedDate.value = date;
   }
 }

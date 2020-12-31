@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ShortTextField {
+class ShortTextField extends StatelessWidget {
   final String question;
 
   ShortTextField({Key key, @required this.question});
 
-  List<Widget> getWidgets() {
-    return <Widget>[
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
       Text(question),
       TextField(
         autofocus: true,
@@ -14,6 +15,6 @@ class ShortTextField {
           print('onSubmitted' + t);
         },
       ),
-    ];
+    ]);
   }
 }
