@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:rsn_form/pages/rsn_stepper.dart';
 
@@ -11,7 +10,9 @@ void main() {
     FlutterError.dumpErrorToConsole(details);
     if (kReleaseMode) exit(1);
   };
-  runApp(MyApp());
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {

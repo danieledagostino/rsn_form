@@ -46,10 +46,11 @@ class _RsnStepperState extends State<RsnStepper> {
               } else {
                 if (snapshot.hasData) {
                   return Column(children: [
-                    Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text(snapshot.data,
-                            style: TextStyle(fontSize: 18))),
+                    SingleChildScrollView(
+                        child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(snapshot.data,
+                                style: TextStyle(fontSize: 18)))),
                     RaisedButton(
                       child: Text('Continue'),
                       onPressed: _isButtonDisabled ? null : _continueNavigation,

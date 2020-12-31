@@ -13,7 +13,6 @@ import 'package:rsn_form/json/json_step.dart';
 class MakeStep {
   List<JsonStep> jsonSteps;
   int currentStep = 0;
-  BuildContext context;
   DateTimeField dateTimeField;
 
   MakeStep.test(final restJson) {
@@ -37,14 +36,12 @@ class MakeStep {
     }
   }
 
-  Step nextStep(JsonStep jsonStep, BuildContext context) {
-    this.context = context;
-
+  Step nextStep(JsonStep jsonStep) {
     Step step = Step(
       title: Text(jsonStep.title),
       isActive: true,
       state: getSepState(jsonStep, currentStep),
-      content: Column(children: _makeWidgets(jsonStep)),
+      content: _makeWidget(jsonStep),
     );
 
     this.currentStep++;
@@ -61,43 +58,36 @@ class MakeStep {
     }
   }
 
-  List<Widget> _makeWidgets(JsonStep jsonStep) {
-    List<Widget> widgets = List<Widget>();
+  Widget _makeWidget(JsonStep jsonStep) {
+    Widget field;
     if (jsonStep.answerType == AnswerType.full) {
-      FullTextField field = FullTextField(question: jsonStep.question);
-      widgets.addAll(field.getWidgets());
+      field = FullTextField(question: jsonStep.question);
     } else if (jsonStep.answerType == AnswerType.short) {
-      ShortTextField field = ShortTextField(question: jsonStep.question);
-      widgets.addAll(field.getWidgets());
+      field = ShortTextField(question: jsonStep.question);
     } else if (jsonStep.answerType == AnswerType.radio) {
-      RadioForm radio = RadioForm(
-          context: context,
-          question: jsonStep.question,
-          values: jsonStep.possibileAnswers);
-      widgets.addAll(radio.getWidgets());
+      field = RadioForm(
+          question: jsonStep.question, values: jsonStep.possibileAnswers);
     } else if (jsonStep.answerType == AnswerType.date) {
-      DateField field = DateField(
-          child: dateTimeField, context: context, question: jsonStep.question);
-      widgets.addAll(field.getWidgets());
+      field = DateField(question: jsonStep.question);
     }
     /*
     else if (jsonStep.answerType == AnswerType.check) {
-      widgets.addAll(Text(''));
+      widget Text(''));
     } else if (jsonStep.answerType == AnswerType.combo) {
-      widgets.addAll(Text(''));
+      widget Text(''));
     } else if (jsonStep.answerType == AnswerType.datetime) {
-      widgets.addAll(Text(''));
+      widget Text(''));
     }
     */
 
-    return widgets;
+    return field;
   }
 
-  List<Step> steps(BuildContext context, int currentStep) {
+  List<Step> steps(int currentStep) {
     List<Step> steps = List<Step>();
     this.currentStep = currentStep;
 
-    jsonSteps.forEach((e) => {steps.add(nextStep(e, context))});
+    jsonSteps.forEach((e) => {steps.add(nextStep(e))});
     return steps;
   }
 }

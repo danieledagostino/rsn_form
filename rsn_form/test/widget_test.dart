@@ -20,7 +20,7 @@ void main() {
 
       MakeStep makeStep = MakeStep.test(restJson);
 
-      List<Step> steps = makeStep.steps(null, 0);
+      List<Step> steps = makeStep.steps(0);
       logger.d(steps);
 
       expect(12, steps.length);

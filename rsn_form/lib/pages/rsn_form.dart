@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rsn_form/form_widget/date_field.dart';
 import 'package:rsn_form/json/json_step.dart';
 import 'package:rsn_form/utility/make_step.dart';
 
@@ -12,7 +11,7 @@ class RsnForm extends StatefulWidget {
   _RsnFormState createState() => _RsnFormState();
 }
 
-class _RsnFormState extends State<RsnForm> with WidgetsBindingObserver {
+class _RsnFormState extends State<RsnForm> {
   MakeStep makeStep;
   List<Step> steps;
 
@@ -23,79 +22,67 @@ class _RsnFormState extends State<RsnForm> with WidgetsBindingObserver {
   void initState() {
     makeStep = MakeStep(widget.jsonSteps);
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
   }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached) {}
-  }
-
-/*
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-*/
 
   @override
   Widget build(BuildContext context) {
-    steps = makeStep.steps(context, currentStep);
+    steps = makeStep.steps(currentStep);
     return new Scaffold(
         appBar: AppBar(
           title: Text('RSN Form'),
         ),
-        body: Column(children: <Widget>[
-          Expanded(
-            child: Stepper(
-              steps: steps,
-              currentStep: currentStep,
-              onStepContinue: next,
-              //onStepTapped: (step) => goTo(step),
-              onStepCancel: cancel,
-              //controlsBuilder: _controller(context),
-            ),
+        body: Expanded(
+          child: Stepper(
+            steps: steps,
+            currentStep: currentStep,
+            onStepContinue: next,
+            //onStepTapped: (step) => goTo(step),
+            onStepCancel: cancel,
+            controlsBuilder: (BuildContext context,
+                {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+              return Row(children: getButtons());
+            },
           ),
-        ]));
+        ));
   }
 
-/*
-  ControlsWidgetBuilder _controller(BuildContext context) {
-    return ControlsWidgetBuilder(context, onStepCancel: () {
-      return Row(
-        children: <Widget>[
-          TextButton(
-            onPressed: next,
-            child: const Text('NEXT'),
-          ),
-          TextButton(
-            onPressed: cancel,
-            child: const Text('CANCEL'),
-          ),
-        ],
-      );
-    });
-  }
-*/
-  void next() {
-    if (currentStep + 1 > steps.length) {
-      setState(() => {});
+  List<Widget> getButtons() {
+    List<Widget> list = List<Widget>();
+
+    if ((currentStep + 1) == steps.length) {
+      list.add(TextButton(
+        onPressed: end,
+        child: const Text('SUBMIT'),
+      ));
     } else {
-      goTo(currentStep + 1);
+      list.add(TextButton(
+        onPressed: next,
+        child: const Text('NEXT'),
+      ));
     }
-    //: setState(() => step.state = StepState.complete);
+
+    if (currentStep != 0) {
+      list.add(TextButton(
+        onPressed: cancel,
+        child: const Text('CANCEL'),
+      ));
+    }
+
+    return list;
+  }
+
+  void end() {}
+
+  void next() {
+    //steps[currentStep].content
+    //Provider.of<DateField>(context).update(null);
+    goTo(currentStep + 1);
   }
 
   void cancel() {
-    if (currentStep > 0) {
-      goTo(currentStep - 1);
-    }
+    //if (currentStep > 0) {
+    goTo(currentStep - 1);
+    //}
   }
 
   void goTo(int step) {
