@@ -31,18 +31,16 @@ class _RsnFormState extends State<RsnForm> {
         appBar: AppBar(
           title: Text('RSN Form'),
         ),
-        body: Expanded(
-          child: Stepper(
-            steps: steps,
-            currentStep: currentStep,
-            onStepContinue: next,
-            //onStepTapped: (step) => goTo(step),
-            onStepCancel: cancel,
-            controlsBuilder: (BuildContext context,
-                {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-              return Row(children: getButtons());
-            },
-          ),
+        body: Stepper(
+          steps: steps,
+          currentStep: currentStep,
+          onStepContinue: next,
+          //onStepTapped: (step) => goTo(step),
+          onStepCancel: cancel,
+          controlsBuilder: (BuildContext context,
+              {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+            return Row(children: getButtons());
+          },
         ));
   }
 

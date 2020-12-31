@@ -41,7 +41,7 @@ class MakeStep {
       title: Text(jsonStep.title),
       isActive: true,
       state: getSepState(jsonStep, currentStep),
-      content: _makeWidget(jsonStep),
+      content: Column(children: _makeWidget(jsonStep)),
     );
 
     this.currentStep++;
@@ -58,17 +58,17 @@ class MakeStep {
     }
   }
 
-  Widget _makeWidget(JsonStep jsonStep) {
-    Widget field;
+  List<Widget> _makeWidget(JsonStep jsonStep) {
+    List<Widget> field = List<Widget>();
     if (jsonStep.answerType == AnswerType.full) {
-      field = FullTextField(question: jsonStep.question);
+      field.add(FullTextField(question: jsonStep.question));
     } else if (jsonStep.answerType == AnswerType.short) {
-      field = ShortTextField(question: jsonStep.question);
+      field.add(ShortTextField(question: jsonStep.question));
     } else if (jsonStep.answerType == AnswerType.radio) {
-      field = RadioForm(
-          question: jsonStep.question, values: jsonStep.possibileAnswers);
+      field.add(RadioForm(
+          question: jsonStep.question, values: jsonStep.possibileAnswers));
     } else if (jsonStep.answerType == AnswerType.date) {
-      field = DateField(question: jsonStep.question);
+      field.add(DateField(question: jsonStep.question));
     }
     /*
     else if (jsonStep.answerType == AnswerType.check) {

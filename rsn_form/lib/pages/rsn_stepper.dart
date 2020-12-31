@@ -56,6 +56,8 @@ class _RsnStepperState extends State<RsnStepper> {
                       onPressed: _isButtonDisabled ? null : _continueNavigation,
                     )
                   ]);
+                } else {
+                  return Text('Loading...');
                 }
               }
             }));
