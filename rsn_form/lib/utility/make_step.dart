@@ -47,6 +47,10 @@ class MakeStep {
       }
     }
 
+    return await jsonDecode(jsonContent);
+  }
+
+  static Future jsonDecode(String jsonContent) async {
     final restJson = json.decode(jsonContent);
     return restJson.map<JsonStep>((m) => JsonStep.fromMap(m)).toList();
   }

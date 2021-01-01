@@ -18,7 +18,7 @@ class JsonStep {
     this.question = map['question'];
     this.answerType = map['answerType'];
     this.step = map['step'];
-    this.mandatory = map['mandatory'];
+    this.mandatory = map['mandatory'] == '1';
     this.regex = (map['regex'] ?? '');
     if (map['answers'] != null) {
       map['answers'].forEach((e) => {
