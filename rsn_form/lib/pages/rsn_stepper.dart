@@ -18,12 +18,25 @@ class _RsnStepperState extends State<RsnStepper> {
   @override
   void initState() {
     super.initState();
-    MakeStep.getResources(isDebug: kDebugMode).then((value) => {
-          setState(() {
-            _isButtonDisabled = false;
-            jsonSteps = value;
-          })
-        });
+    MakeStep.getResources(isDebug: kDebugMode)
+        .then((value) => {
+              setState(() {
+                _isButtonDisabled = false;
+                jsonSteps = value;
+              })
+            })
+        .catchError((err) {
+      /*
+      final snackBar = SnackBar(
+        content: Text('Error while retrieving form!'),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      );
+      Scaffold.of(context).showSnackBar(snackBar);
+      */
+    });
   }
 
   void _continueNavigation() {
@@ -51,7 +64,7 @@ class _RsnStepperState extends State<RsnStepper> {
                         padding: EdgeInsets.all(8),
                         child: Text(snapshot.data,
                             style: TextStyle(fontSize: 18))),
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text('Continue'),
                       onPressed: _isButtonDisabled ? null : _continueNavigation,
                     )
