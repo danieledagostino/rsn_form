@@ -37,9 +37,15 @@ dependencies:
   permission_handler: ^5.0.1
   provider: ^3.0.0
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "resources/icon/icon.png"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.8.0"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
