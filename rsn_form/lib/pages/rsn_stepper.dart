@@ -4,6 +4,7 @@ import 'package:rsn_form/pages/rsn_form.dart';
 import 'package:rsn_form/utility/make_step.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/foundation.dart';
+import 'package:rsn_form/utility/notify.dart';
 
 class RsnStepper extends StatefulWidget {
   @override

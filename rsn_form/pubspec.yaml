@@ -36,6 +36,7 @@ dependencies:
   logger: ^0.9.4
   permission_handler: ^5.0.1
   provider: ^3.0.0
+  flutter_local_notifications: ^3.0.2
 
 flutter_icons:
   android: true
