@@ -33,8 +33,10 @@ class MakeStep {
       await rootBundle
           .loadString('resources/widget_conf.json')
           .then((value) => jsonContent = value)
-          .catchError(
-              (error) => {logger.e('Exception during widget_conf.json')});
+          .catchError((error) {
+        logger.e('Exception during widget_conf.json');
+        throw ('file not found');
+      });
     } else {
       final String url =
           'https://drive.google.com/uc?id=1NVLzrw72fD02AmumzTzKkg410bbs84Pt';
