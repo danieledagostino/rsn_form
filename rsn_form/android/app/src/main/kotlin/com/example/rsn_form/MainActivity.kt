@@ -1,4 +1,4 @@
-package com.example.rsn_form
+package com.rsn_form
 
 import io.flutter.embedding.android.FlutterActivity
 
