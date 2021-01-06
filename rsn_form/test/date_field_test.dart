@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('Select date on datetimefiled change success', () {
-    final field = DateField(question: '');
+    final field = RsnDateField(step: 1, question: '');
     //expect(DateTime.now().day, field.selectedDate.day);
     //expect(DateTime.now().month, field.selectedDate.month);
     final testDate = DateTime.tryParse('1970-01-01');

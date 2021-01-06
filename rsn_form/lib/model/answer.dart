@@ -6,7 +6,7 @@ class Answer {
   Answer(this.step, this.question, this.value);
 
   Map<String, dynamic> toMap() {
-    return {'step': step ?? null, 'question': question, 'value': value};
+    return {'step': step, 'question': question, 'value': value};
   }
 
   Answer.fromMap(Map<String, dynamic> map) {

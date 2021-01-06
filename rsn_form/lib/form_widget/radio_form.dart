@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:rsn_form/form_widget/super_widget.dart';
+import 'package:rsn_form/model/answer.dart';
 
-class RadioForm extends SuperWidget {
+class RsnRadioField extends SuperWidget {
   final Map<String, String> values;
   ValueNotifier<String> selectedValue = ValueNotifier<String>('');
 
-  RadioForm({String question, @required this.values, String selectedValue})
-      : super(question) {
-    this.selectedValue.value = selectedValue;
+  RsnRadioField(
+      {int step, String question, @required this.values, String value})
+      : super(step, question, value) {
+    this.selectedValue.value = value;
   }
 
   @override
@@ -30,5 +32,6 @@ class RadioForm extends SuperWidget {
 
   void update(String value) {
     selectedValue.value = value;
+    dao.insert(Answer(this.step, this.question, value));
   }
 }

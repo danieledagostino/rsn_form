@@ -1,6 +1,15 @@
+import 'dart:math';
+
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:rsn_form/dao/answer_dao.dart';
+import 'package:rsn_form/form_widget/short_text_field.dart';
 import 'package:rsn_form/json/json_step.dart';
+import 'package:rsn_form/model/answer.dart';
+import 'package:rsn_form/utility/gsheet_utils.dart';
 import 'package:rsn_form/utility/make_step.dart';
+import 'package:rsn_form/utility/notify.dart';
+import 'package:http/http.dart';
 
 class RsnForm extends StatefulWidget {
   final List<JsonStep> jsonSteps;
@@ -14,14 +23,24 @@ class RsnForm extends StatefulWidget {
 class _RsnFormState extends State<RsnForm> {
   MakeStep makeStep;
   List<Step> steps;
+  AnswerDao _dao;
+  Answer _answer;
 
   int currentStep = 0;
   bool complete = false;
 
   @override
   void initState() {
-    makeStep = MakeStep(widget.jsonSteps);
     super.initState();
+    _dao = AnswerDao();
+    makeStep = MakeStep(widget.jsonSteps);
+    //AndroidAlarmManager.initialize();
+  }
+
+  void init() async {
+    await AndroidAlarmManager.oneShot(const Duration(seconds: 10),
+        Random().nextInt(pow(2, 31)), Notify.setAlarm,
+        exact: true, wakeup: true);
   }
 
   @override
@@ -69,12 +88,32 @@ class _RsnFormState extends State<RsnForm> {
     return list;
   }
 
-  void end() {}
+  void end() {
+    GsheetUtils gsheet = GsheetUtils();
+
+    _dao.findAll().then((List<Answer> list) {
+      gsheet.sendData(list).then((Response res) {
+        if (res.statusCode == GsheetUtils.STATUS_SUCCESS) {
+          //TODO thanks for send bla bla
+          //setAlarm next session
+          _dao.deleteAll();
+        }
+      });
+    });
+  }
 
   void next() {
-    //steps[currentStep].content
+    Column col = steps[currentStep].content;
+    col.children.forEach((e) {
+      if (e is RsnShortTextField) {
+        RsnShortTextField field = e;
+        _answer = Answer(field.step, field.question, field.controller.text);
+        _dao.insertOrUpdate(_answer);
+      }
+    });
     //Provider.of<DateField>(context).update(null);
     goTo(currentStep + 1);
+    FocusScope.of(context).unfocus();
   }
 
   void cancel() {

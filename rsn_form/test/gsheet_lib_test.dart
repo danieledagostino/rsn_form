@@ -1,17 +1,19 @@
+import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
+import 'package:rsn_form/model/answer.dart';
 import 'package:rsn_form/utility/gsheet_utils.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
+import 'package:path/path.dart';
 
 void main() {
   var logger = Logger();
   //TestWidgetsFlutterBinding.ensureInitialized();
-  const String URL =
-      "https://script.google.com/macros/s/AKfycbx3KTL9YJhxUVMyU0X1UJ-ErU40B60shIlJRaCsFncJuXZvN0aJ6lhAkQ/exec";
 
   test('sendData to Google spreadsheet', () async {
+    String URL = FlutterConfig.get('gsheet_url');
     Map jsonAnswers = {
       "step1": "Kevin2",
       "step2": "Mohammad2",
@@ -28,6 +30,26 @@ void main() {
         .then((r) async {
       print(r.body);
       expect(r.statusCode, 200);
+    });
+  });
+
+  test('GsheetUtil test', () async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+
+    rootBundle
+        .loadString(join('test_resources', 'widget_form_test.json'))
+        .then((value) {
+      List<Answer> list = json.decode(value).map((e) {
+        final answer = Answer.fromMap(e.value);
+        return answer;
+      }).toList();
+      GsheetUtils util = GsheetUtils();
+
+      util.sendData(list).then((value) {
+        if (value.statusCode == GsheetUtils.STATUS_SUCCESS) {
+          print('data sent');
+        }
+      });
     });
   });
 }

@@ -36,6 +36,9 @@ dependencies:
   logger: ^0.9.4
   permission_handler: ^5.0.1
   provider: ^3.0.0
+  android_alarm_manager: ^0.4.5+17
+  flutter_local_notifications: ^3.0.2
+  flutter_config: ^1.0.8
 
 flutter_icons:
   android: true
@@ -62,7 +65,7 @@ flutter:
   assets:
    - resources/disclaimer.txt
    - test_resources/widget_conf.json
-   - resources/widget_conf.json
+   - test_resources/widget_form_test.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -4,6 +4,7 @@ import 'package:rsn_form/pages/rsn_form.dart';
 import 'package:rsn_form/utility/make_step.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
 
 class RsnStepper extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class _RsnStepperState extends State<RsnStepper> {
   bool _isButtonDisabled = true;
   MakeStep makeStep;
   List<JsonStep> jsonSteps;
+  BuildContext buildContext;
 
   @override
   void initState() {
@@ -41,19 +43,20 @@ class _RsnStepperState extends State<RsnStepper> {
 
   void _continueNavigation() {
     setState(() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => RsnForm(jsonSteps)));
+      Navigator.push(buildContext,
+          MaterialPageRoute(builder: (context) => RsnForm(jsonSteps)));
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    buildContext = context;
     return new Scaffold(
         appBar: AppBar(
           title: Text('RSN Form'),
         ),
         body: FutureBuilder<String>(
-            future: rootBundle.loadString('resources/disclaimer.txt'),
+            future: rootBundle.loadString(join('resources', 'disclaimer.txt')),
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               if (snapshot.hasError) {
                 return Text(snapshot.error);

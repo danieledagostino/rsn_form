@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 
 class Notify {
   FlutterLocalNotificationsPlugin plugin = FlutterLocalNotificationsPlugin();
@@ -38,14 +37,14 @@ class Notify {
     //navigator
   }
 
-  void setAlarm() async {
+  static Future<void> setAlarm() async {
     final int formAlarm = 0;
 
-    await AndroidAlarmManager.periodic(
-        const Duration(seconds: 10), formAlarm, _show);
+    Notify notify = Notify();
+    notify.show();
   }
 
-  void _show() async {
+  void show() async {
     await notifications('Fill form', 'Please rember to fill and sent the form');
   }
 

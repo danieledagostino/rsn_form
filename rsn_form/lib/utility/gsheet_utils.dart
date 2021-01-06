@@ -1,16 +1,25 @@
+import 'dart:convert';
+
+import 'package:flutter_config/flutter_config.dart';
 import 'package:http/http.dart' as http;
+import 'package:rsn_form/model/answer.dart';
 
 class GsheetUtils {
-  String _credentials;
-  final String URL =
-      "https://script.google.com/macros/s/AKfycbx3KTL9YJhxUVMyU0X1UJ-ErU40B60shIlJRaCsFncJuXZvN0aJ6lhAkQ/exec";
+  String _URL;
 
   // Success Status Message
   static const STATUS_SUCCESS = "SUCCESS";
 
-  GsheetUtils() {}
+  GsheetUtils() {
+    _URL = FlutterConfig.get('gsheet_url');
+  }
 
-  Future<http.Response> sendData(final data) async {
-    return await http.post(URL, body: data);
+  Future<http.Response> sendData(List<Answer> data) async {
+    final jsonBody = jsonEncode(data);
+    return await http.post(Uri.parse(_URL),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonBody);
   }
 }

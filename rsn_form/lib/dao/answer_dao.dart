@@ -9,7 +9,7 @@ class AnswerDao {
   DatabaseFactory databaseFactory = databaseFactoryIo;
   Database _db; //db declaration
   //specifiy the store folder of this map (database)
-  final store = intMapStoreFactory.store('articoli');
+  final store = intMapStoreFactory.store('form_answers');
 
   static final AnswerDao _singleton = AnswerDao._internal();
 
@@ -44,15 +44,43 @@ class AnswerDao {
     return id;
   }
 
+  Future insertOrUpdate(Answer answer) async {
+    init();
+    Answer find = await findByStep(answer.step);
+    if (find == null) {
+      return insert(answer);
+    } else {
+      return update(answer);
+    }
+  }
+
   Future<List<Answer>> findAll() async {
     init();
     final finder = Finder(sortOrders: [SortOrder('step')]);
     final answers = await store.find(_db, finder: finder);
     return answers.map((e) {
-      final art = Answer.fromMap(e.value);
-      art.step = e.key;
-      return art;
+      final answer = Answer.fromMap(e.value);
+      //art.step = e.key;
+      return answer;
     }).toList();
+  }
+
+  Future<Answer> findByStep(int step) async {
+    init();
+    final finder = Finder(
+        sortOrders: [SortOrder('step')], filter: Filter.equals('step', step));
+    final answers = await store.find(_db, finder: finder);
+    List<Answer> list = answers.map((e) {
+      final answer = Answer.fromMap(e.value);
+      //art.step = e.key;
+      return answer;
+    }).toList();
+
+    if (list.length > 0) {
+      return list.first;
+    } else {
+      return null;
+    }
   }
 
   Future update(Answer a) async {

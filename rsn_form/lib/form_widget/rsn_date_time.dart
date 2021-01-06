@@ -4,11 +4,11 @@ import 'package:date_field/date_field.dart';
 import 'package:rsn_form/form_widget/super_widget.dart';
 import 'package:rsn_form/model/answer.dart';
 
-class RsnDateField extends SuperWidget {
+class RsnDateTimeField extends SuperWidget {
   ValueNotifier<DateTime> selectedDate = ValueNotifier(DateTime.now());
 
-  RsnDateField({int step, String question, String value})
-      : super(step, question, value);
+  RsnDateTimeField({int step, String question, String value})
+      : super(step, question, value) {}
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +18,9 @@ class RsnDateField extends SuperWidget {
         builder: (BuildContext context, DateTime newDate, Widget child) {
           return DateTimeField(
             selectedDate: newDate ?? DateTime.now(),
-            mode: DateFieldPickerMode.date,
+            mode: DateFieldPickerMode.dateAndTime,
             onDateSelected: (DateTime date) => {update(date)},
-            lastDate: DateTime(2021),
+            lastDate: DateTime(2022),
           );
         }));
     return Column(children: list);
