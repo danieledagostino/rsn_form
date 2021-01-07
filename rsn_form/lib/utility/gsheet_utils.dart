@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter_config/flutter_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:rsn_form/model/answer.dart';
@@ -15,7 +13,8 @@ class GsheetUtils {
   }
 
   Future<http.Response> sendData(List<Answer> data) async {
-    final jsonBody = jsonEncode(data);
+    final jsonBody = data.map((Answer e) => e.toMap()).toList();
+
     return await http.post(Uri.parse(_URL),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
