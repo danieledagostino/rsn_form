@@ -8,6 +8,7 @@ void main() {
     String questionTest = 'Question test 1';
 
     AnswerDao dao = AnswerDao();
+    dao.deleteAll();
 
     Answer toInsert = Answer(step, questionTest, 'Response 1');
 
@@ -18,5 +19,10 @@ void main() {
       expect(questionTest, value.question);
       print(value);
     });
+  });
+
+  test('launch deleteAll to clean db', () {
+    AnswerDao dao = AnswerDao();
+    dao.deleteAll();
   });
 }
