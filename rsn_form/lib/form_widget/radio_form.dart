@@ -6,15 +6,15 @@ class RsnRadioField extends SuperWidget {
   final Map<String, String> values;
   ValueNotifier<String> selectedValue = ValueNotifier<String>('');
 
-  RsnRadioField(
-      {int step, String question, @required this.values, String value})
-      : super(step, question, value) {
-    this.selectedValue.value = value;
-  }
+  RsnRadioField({int step, String question, @required this.values})
+      : super(step, question);
 
   @override
   Widget build(BuildContext context) {
     List<Widget> list = getInitialWidgetList();
+    this.dao.findByStep(this.step).then((Answer answer) {
+      selectedValue.value = answer.value;
+    });
     values.forEach((key, value) {
       list.add(ValueListenableBuilder(
           valueListenable: selectedValue,
@@ -32,6 +32,6 @@ class RsnRadioField extends SuperWidget {
 
   void update(String value) {
     selectedValue.value = value;
-    dao.insert(Answer(this.step, this.question, value));
+    dao.insertOrUpdate(Answer(this.step, this.question, value));
   }
 }

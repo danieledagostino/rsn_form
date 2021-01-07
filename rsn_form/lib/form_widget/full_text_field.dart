@@ -5,8 +5,7 @@ import 'package:rsn_form/model/answer.dart';
 class RsnFullTextField extends SuperWidget {
   final TextEditingController controller = TextEditingController();
 
-  RsnFullTextField({int step, String question, String value})
-      : super(step, question, value);
+  RsnFullTextField({int step, String question}) : super(step, question);
 
   @override
   Widget build(BuildContext context) {

@@ -7,12 +7,14 @@ import 'package:rsn_form/model/answer.dart';
 class RsnDateField extends SuperWidget {
   ValueNotifier<DateTime> selectedDate = ValueNotifier(DateTime.now());
 
-  RsnDateField({int step, String question, String value})
-      : super(step, question, value);
+  RsnDateField({int step, String question}) : super(step, question);
 
   @override
   Widget build(BuildContext context) {
     List<Widget> list = getInitialWidgetList();
+    this.dao.findByStep(this.step).then((Answer answer) {
+      selectedDate.value = DateTime.parse(answer.value);
+    });
     list.add(ValueListenableBuilder(
         valueListenable: selectedDate,
         builder: (BuildContext context, DateTime newDate, Widget child) {
@@ -20,7 +22,7 @@ class RsnDateField extends SuperWidget {
             selectedDate: newDate ?? DateTime.now(),
             mode: DateFieldPickerMode.date,
             onDateSelected: (DateTime date) => {update(date)},
-            lastDate: DateTime(2021),
+            lastDate: DateTime.now().add(Duration(days: 1)),
           );
         }));
     return Column(children: list);
@@ -28,6 +30,6 @@ class RsnDateField extends SuperWidget {
 
   void update(DateTime date) {
     selectedDate.value = date;
-    dao.insert(Answer(this.step, this.question, date.toString()));
+    dao.insertOrUpdate(Answer(this.step, this.question, date.toString()));
   }
 }

@@ -4,10 +4,9 @@ import 'package:rsn_form/dao/answer_dao.dart';
 abstract class SuperWidget extends StatelessWidget {
   String question;
   int step;
-  String value;
   AnswerDao dao;
 
-  SuperWidget(this.step, this.question, this.value) {
+  SuperWidget(this.step, this.question) {
     dao = AnswerDao();
   }
 
