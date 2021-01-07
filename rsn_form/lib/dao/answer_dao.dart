@@ -66,36 +66,41 @@ class AnswerDao {
   }
 
   Future<Answer> findByStep(int step) async {
-    init();
-    final finder = Finder(
-        sortOrders: [SortOrder('step')], filter: Filter.equals('step', step));
-    final answers = await store.find(_db, finder: finder);
-    List<Answer> list = answers.map((e) {
-      final answer = Answer.fromMap(e.value);
-      //art.step = e.key;
-      return answer;
-    }).toList();
+    if (step != null) {
+      init();
+      final finder = Finder(
+          sortOrders: [SortOrder('step')], filter: Filter.equals('step', step));
+      final answers = await store.find(_db, finder: finder);
+      List<Answer> list = answers.map((e) {
+        final answer = Answer.fromMap(e.value);
+        //art.step = e.key;
+        return answer;
+      }).toList();
 
-    if (list.length > 0) {
-      return list.first;
+      if (list.length > 0) {
+        return list.first;
+      } else {
+        return null;
+      }
     } else {
-      return null;
+      return Answer(0, '', '');
     }
   }
 
   Future update(Answer a) async {
     init();
-    final finder = Finder(filter: Filter.byKey(a.step));
+    final finder = Finder(filter: Filter.equals('step', a.step));
     await store.update(_db, a.toMap(), finder: finder);
   }
 
   Future delete(Answer a) async {
     init();
-    final finder = Finder(filter: Filter.byKey(a.step));
+    final finder = Finder(filter: Filter.equals('step', a.step));
     await store.delete(_db, finder: finder);
   }
 
   Future deleteAll() async {
+    init();
     await store.delete(_db);
   }
 }
