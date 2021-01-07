@@ -7,10 +7,11 @@ class JsonStep {
   int step;
   bool mandatory;
   String regex;
+  KeyboardType keyboardType;
   LinkedHashMap<String, String> possibileAnswers;
 
   JsonStep(this.title, this.question, this.answerType, this.step,
-      this.mandatory, this.regex, this.possibileAnswers);
+      this.mandatory, this.regex, this.keyboardType, this.possibileAnswers);
 
   JsonStep.fromMap(Map<String, dynamic> map) {
     possibileAnswers = LinkedHashMap<String, String>();
@@ -20,6 +21,9 @@ class JsonStep {
     this.step = map['step'];
     this.mandatory = map['mandatory'] == '1';
     this.regex = (map['regex'] ?? '');
+    this.keyboardType = (map['keyboard_type'] == 'text')
+        ? KeyboardType.text
+        : KeyboardType.numeric;
     if (map['answers'] != null) {
       map['answers'].forEach((e) => {
             possibileAnswers.putIfAbsent(
@@ -28,3 +32,5 @@ class JsonStep {
     }
   }
 }
+
+enum KeyboardType { text, numeric }

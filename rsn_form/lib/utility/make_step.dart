@@ -21,6 +21,7 @@ class MakeStep {
   List<JsonStep> jsonSteps;
   int currentStep = 0;
   DateTimeField dateTimeField;
+  AnswerDao dao;
 
   static var logger = Logger();
 
@@ -97,20 +98,22 @@ class MakeStep {
 
   List<Widget> _makeWidget(JsonStep jsonStep) {
     List<Widget> field = List<Widget>();
-    AnswerDao dao = AnswerDao();
+    /*
+    if (dao == null) {
+      dao = AnswerDao();
+    }
     Answer answer = Answer(0, '', '');
     if (jsonStep.step == (currentStep + 1)) {
       dao.findByStep(jsonStep.step).then((Answer value) => {answer = value});
     }
+    */
 
     if (jsonStep.answerType == AnswerType.full) {
       field.add(
           RsnFullTextField(step: jsonStep.step, question: jsonStep.question));
     } else if (jsonStep.answerType == AnswerType.short) {
-      field.add(RsnShortTextField(
-          step: jsonStep.step,
-          question: jsonStep.question,
-          value: answer.value));
+      field.add(
+          RsnShortTextField(step: jsonStep.step, question: jsonStep.question));
     } else if (jsonStep.answerType == AnswerType.radio) {
       field.add(RsnRadioField(
           step: jsonStep.step,
