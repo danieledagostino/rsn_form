@@ -1,19 +1,18 @@
-import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
 import 'package:rsn_form/model/answer.dart';
 import 'package:rsn_form/utility/gsheet_utils.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:path/path.dart';
+import 'package:rsn_form/.env.dart';
 
 void main() {
-  var logger = Logger();
   //TestWidgetsFlutterBinding.ensureInitialized();
 
   test('sendData to Google spreadsheet', () async {
-    String URL = FlutterConfig.get('gsheet_url');
+    String URL = rsn_env['GSHEET_URL'];
     Map jsonAnswers = {
       "step1": "Kevin2",
       "step2": "Mohammad2",
@@ -28,7 +27,7 @@ void main() {
             },
             body: jsonEncode(jsonAnswers))
         .then((r) async {
-      print(r.body);
+      debugPrint(r.body);
       expect(r.statusCode, 200);
     });
   });
@@ -47,7 +46,7 @@ void main() {
 
       util.sendData(list).then((value) {
         if (value.statusCode == GsheetUtils.STATUS_SUCCESS) {
-          print('data sent');
+          debugPrint('data sent');
         }
       });
     });

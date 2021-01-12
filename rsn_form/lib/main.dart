@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:rsn_form/pages/rsn_stepper.dart';
-import 'package:flutter_config/flutter_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
-  await FlutterConfig.loadEnvVariables();
+
   const bool kReleaseMode =
       bool.fromEnvironment('dart.vm.product', defaultValue: false);
 
@@ -13,6 +12,7 @@ void main() async {
     FlutterError.dumpErrorToConsole(details);
     if (kReleaseMode) exit(1);
   };
+
   runApp(
     MyApp(),
   );

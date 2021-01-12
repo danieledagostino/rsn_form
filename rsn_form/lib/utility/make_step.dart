@@ -1,10 +1,11 @@
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_config/flutter_config.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:path/path.dart';
+
+import 'package:rsn_form/.env.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:rsn_form/dao/answer_dao.dart';
@@ -14,16 +15,12 @@ import 'package:rsn_form/form_widget/radio_form.dart';
 import 'package:rsn_form/form_widget/rsn_date_time.dart';
 import 'package:rsn_form/form_widget/short_text_field.dart';
 import 'package:rsn_form/json/json_step.dart';
-import 'package:logger/logger.dart';
-import 'package:rsn_form/model/answer.dart';
 
 class MakeStep {
   List<JsonStep> jsonSteps;
   int currentStep = 0;
   DateTimeField dateTimeField;
   AnswerDao dao;
-
-  static var logger = Logger();
 
   MakeStep.test(final restJson) {
     try {
@@ -40,16 +37,19 @@ class MakeStep {
           .loadString(join('test_resources', 'widget_conf.json'))
           .then((value) => jsonContent = value)
           .catchError((error) {
-        logger.e('Exception during widget_conf.json');
+        stderr.writeln('Exception during widget_conf.json');
         throw ('file not found');
       });
     } else {
-      final String url = FlutterConfig.get('json_form_conf');
-      var res = await http.get(url);
+      final String url = rsn_env['JSON_FORM_CONF'];
+      print('sto passando da qua: ' + url);
+      var res = await http.get(url).catchError((e) {
+        stderr.writeln('Exception during widget_conf.json\n' + e.toString());
+      });
       if (res.statusCode == 200) {
         jsonContent = res.body;
       } else {
-        print("resource not available: " + res.statusCode.toString());
+        stderr.writeln('resource not available: ' + res.statusCode.toString());
         exit(1);
       }
     }

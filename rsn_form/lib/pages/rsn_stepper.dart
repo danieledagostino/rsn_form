@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:rsn_form/json/json_step.dart';
 import 'package:rsn_form/pages/rsn_form.dart';
@@ -38,6 +40,7 @@ class _RsnStepperState extends State<RsnStepper> {
       );
       Scaffold.of(context).showSnackBar(snackBar);
       */
+      stderr.writeln(err.toString());
     });
   }
 

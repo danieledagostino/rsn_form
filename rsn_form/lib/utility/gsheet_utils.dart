@@ -1,6 +1,6 @@
-import 'package:flutter_config/flutter_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:rsn_form/model/answer.dart';
+import 'package:rsn_form/.env.dart';
 
 class GsheetUtils {
   String _URL;
@@ -9,7 +9,7 @@ class GsheetUtils {
   static const STATUS_SUCCESS = "SUCCESS";
 
   GsheetUtils() {
-    _URL = FlutterConfig.get('gsheet_url');
+    _URL = rsn_env['GSHEET_URL'];
   }
 
   Future<http.Response> sendData(List<Answer> data) async {
