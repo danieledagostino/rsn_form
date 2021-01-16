@@ -38,13 +38,14 @@ class _RsnFormState extends State<RsnForm> {
     super.initState();
     _dao = GetIt.I.get();
     makeStep = MakeStep(widget.jsonSteps);
-    //AndroidAlarmManager.initialize();
+    AndroidAlarmManager.initialize();
+    init();
   }
 
   void init() async {
-    await AndroidAlarmManager.oneShot(const Duration(seconds: 10),
+    await AndroidAlarmManager.periodic(const Duration(seconds: 10),
         Random().nextInt(pow(2, 31)), Notify.setAlarm,
-        exact: true, wakeup: true);
+        exact: true, wakeup: true, rescheduleOnReboot: true);
   }
 
   @override

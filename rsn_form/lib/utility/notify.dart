@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get_it/get_it.dart';
+import 'package:rsn_form/pages/rsn_form.dart';
+import 'package:rsn_form/pages/rsn_stepper.dart';
 
 class Notify {
   FlutterLocalNotificationsPlugin plugin = FlutterLocalNotificationsPlugin();
@@ -34,7 +38,11 @@ class Notify {
   }
 
   Future onSelectNotification(String payload) {
-    //navigator
+    /*
+    final navKey = GetIt.I.get(instanceName: 'homePageNavKey');
+    navKey.currentState
+        .push(MaterialPageRoute(builder: (context) => RsnStepper()));
+    */
   }
 
   static Future<void> setAlarm() async {
