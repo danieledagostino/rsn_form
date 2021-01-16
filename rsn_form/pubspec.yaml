@@ -37,6 +37,7 @@ dependencies:
   provider: ^3.0.0
   android_alarm_manager: ^0.4.5+17
   flutter_local_notifications: ^3.0.2
+  get_it: ^4.0.2
 
 flutter_icons:
   android: true

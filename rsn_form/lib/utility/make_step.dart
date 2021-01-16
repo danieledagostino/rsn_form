@@ -8,7 +8,6 @@ import 'package:path/path.dart';
 import 'package:rsn_form/.env.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:rsn_form/dao/answer_dao.dart';
 import 'package:rsn_form/form_widget/date_field.dart';
 import 'package:rsn_form/form_widget/full_text_field.dart';
 import 'package:rsn_form/form_widget/radio_form.dart';
@@ -20,7 +19,6 @@ class MakeStep {
   List<JsonStep> jsonSteps;
   int currentStep = 0;
   DateTimeField dateTimeField;
-  AnswerDao dao;
 
   MakeStep.test(final restJson) {
     try {
@@ -71,18 +69,6 @@ class MakeStep {
     );
 
     return step;
-/*
-    Step step;
-    _makeWidget(jsonStep).then((value) => {
-          step = Step(
-            title: Text(jsonStep.title),
-            isActive: true,
-            state: getSepState(jsonStep, currentStep),
-            content: Column(children: value),
-          )
-        });
-    return step;
-    */
   }
 
   StepState getSepState(JsonStep jsonStep, int currentStep) {

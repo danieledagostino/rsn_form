@@ -10,11 +10,11 @@ class RsnRadioField extends SuperWidget {
       : super(step, question);
 
   @override
-  Widget build(BuildContext context) {
-    List<Widget> list = getInitialWidgetList();
-    this.dao.findByStep(this.step).then((Answer answer) {
-      selectedValue.value = answer.value;
-    });
+  Widget getFormWidget(String value) {
+    List<Widget> list = List<Widget>();
+    if (value.isNotEmpty) {
+      selectedValue.value = value;
+    }
     values.forEach((key, value) {
       list.add(ValueListenableBuilder(
           valueListenable: selectedValue,

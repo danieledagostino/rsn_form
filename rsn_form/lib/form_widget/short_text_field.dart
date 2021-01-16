@@ -8,23 +8,12 @@ class RsnShortTextField extends SuperWidget {
   TextEditingController controller = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-    List<Widget> list = getInitialWidgetList();
-
-    this.dao.findByStep(this.step).then((Answer answer) {
-      controller.text = answer.value ?? '';
-    });
-
-    list.add(TextFormField(
+  Widget getFormWidget(String value) {
+    controller.text = value;
+    return TextFormField(
       autofocus: true,
       controller: controller,
-      /*
-      onChanged: (v) {
-        if (v.length > 5)
-          dao.insert(Answer(this.step, this.question, controller.text));
-      },
-      */
-    ));
-    return Column(children: list);
+      onEditingComplete: () => {},
+    );
   }
 }

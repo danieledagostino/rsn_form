@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:rsn_form/dao/answer_dao.dart';
+import 'package:rsn_form/dao/i_answer_dao.dart';
 import 'package:rsn_form/form_widget/short_text_field.dart';
 import 'package:rsn_form/json/json_step.dart';
 import 'package:rsn_form/model/answer.dart';
@@ -23,8 +26,9 @@ class RsnForm extends StatefulWidget {
 class _RsnFormState extends State<RsnForm> {
   MakeStep makeStep;
   List<Step> steps;
-  AnswerDao _dao;
+  IAnswerDao _dao;
   Answer _answer;
+  BuildContext _context;
 
   int currentStep = 0;
   bool complete = false;
@@ -32,7 +36,7 @@ class _RsnFormState extends State<RsnForm> {
   @override
   void initState() {
     super.initState();
-    _dao = AnswerDao();
+    _dao = GetIt.I.get();
     makeStep = MakeStep(widget.jsonSteps);
     //AndroidAlarmManager.initialize();
   }
@@ -45,6 +49,7 @@ class _RsnFormState extends State<RsnForm> {
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     steps = makeStep.steps(currentStep);
     return new Scaffold(
         appBar: AppBar(
@@ -89,20 +94,37 @@ class _RsnFormState extends State<RsnForm> {
   }
 
   void end() {
+    saveData();
     GsheetUtils gsheet = GsheetUtils();
 
     _dao.findAll().then((List<Answer> list) {
       gsheet.sendData(list).then((Response res) {
         if (res.statusCode == GsheetUtils.STATUS_SUCCESS) {
-          //TODO thanks for send bla bla
-          //setAlarm next session
+          showAlert('Form submitted', 'Thanks to have shared your experience');
           _dao.deleteAll();
+        } else {
+          stderr.writeln(
+              "Got some errors. Status code: " + res.statusCode.toString());
+          showAlert('Form not submitted',
+              'Oh no! Some issues occurred. Please retry');
         }
-      });
+      }).catchError((e) => showAlert(
+          'Form not submitted', 'Oh no! Some issues occurred. Please retry'));
     });
   }
 
-  void next() {
+  showAlert(String title, String content) {
+    showDialog(
+        context: _context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+          );
+        });
+  }
+
+  void saveData() {
     Column col = steps[currentStep].content;
     col.children.forEach((e) {
       if (e is RsnShortTextField) {
@@ -111,6 +133,10 @@ class _RsnFormState extends State<RsnForm> {
         _dao.insertOrUpdate(_answer);
       }
     });
+  }
+
+  void next() {
+    saveData();
     //Provider.of<DateField>(context).update(null);
     goTo(currentStep + 1);
     FocusScope.of(context).unfocus();

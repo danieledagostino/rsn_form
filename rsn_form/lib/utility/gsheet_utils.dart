@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:rsn_form/model/answer.dart';
 import 'package:rsn_form/.env.dart';
@@ -19,6 +21,6 @@ class GsheetUtils {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonBody);
+        body: json.encode(jsonBody));
   }
 }

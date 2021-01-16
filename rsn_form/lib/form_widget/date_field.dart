@@ -10,12 +10,11 @@ class RsnDateField extends SuperWidget {
   RsnDateField({int step, String question}) : super(step, question);
 
   @override
-  Widget build(BuildContext context) {
-    List<Widget> list = getInitialWidgetList();
-    this.dao.findByStep(this.step).then((Answer answer) {
-      selectedDate.value = DateTime.parse(answer.value);
-    });
-    list.add(ValueListenableBuilder(
+  Widget getFormWidget(String value) {
+    if (value.isNotEmpty) {
+      selectedDate.value = DateTime.parse(value);
+    }
+    return ValueListenableBuilder(
         valueListenable: selectedDate,
         builder: (BuildContext context, DateTime newDate, Widget child) {
           return DateTimeField(
@@ -24,8 +23,7 @@ class RsnDateField extends SuperWidget {
             onDateSelected: (DateTime date) => {update(date)},
             lastDate: DateTime.now().add(Duration(days: 1)),
           );
-        }));
-    return Column(children: list);
+        });
   }
 
   void update(DateTime date) {

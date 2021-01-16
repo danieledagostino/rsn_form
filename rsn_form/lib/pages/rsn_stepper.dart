@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:rsn_form/dao/init.dart';
 import 'package:rsn_form/json/json_step.dart';
 import 'package:rsn_form/pages/rsn_form.dart';
 import 'package:rsn_form/utility/make_step.dart';
@@ -18,10 +19,12 @@ class _RsnStepperState extends State<RsnStepper> {
   MakeStep makeStep;
   List<JsonStep> jsonSteps;
   BuildContext buildContext;
+  String _infoText;
 
   @override
   void initState() {
     super.initState();
+    _infoText = 'Form loading...';
     MakeStep.getResources(isDebug: kDebugMode)
         .then((value) => {
               setState(() {
@@ -30,24 +33,28 @@ class _RsnStepperState extends State<RsnStepper> {
               })
             })
         .catchError((err) {
-      /*
-      final snackBar = SnackBar(
-        content: Text('Error while retrieving form!'),
-        action: SnackBarAction(
-          label: 'OK',
-          onPressed: () {},
-        ),
-      );
-      Scaffold.of(context).showSnackBar(snackBar);
-      */
+      _infoText = err.toString();
       stderr.writeln(err.toString());
     });
   }
 
   void _continueNavigation() {
     setState(() {
-      Navigator.push(buildContext,
-          MaterialPageRoute(builder: (context) => RsnForm(jsonSteps)));
+      Navigator.push(buildContext, MaterialPageRoute(builder: (context) {
+        return FutureBuilder<dynamic>(
+            future: Init.initialize(), //dao.findByStep(this.step),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return RsnForm(jsonSteps);
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.lightBlueAccent,
+                  ),
+                );
+              }
+            });
+      }));
     });
   }
 
@@ -70,10 +77,12 @@ class _RsnStepperState extends State<RsnStepper> {
                         padding: EdgeInsets.all(8),
                         child: Text(snapshot.data,
                             style: TextStyle(fontSize: 18))),
-                    ElevatedButton(
-                      child: Text('Continue'),
-                      onPressed: _isButtonDisabled ? null : _continueNavigation,
-                    )
+                    (_isButtonDisabled
+                        ? Text(_infoText)
+                        : ElevatedButton(
+                            child: Text('Continue'),
+                            onPressed: _continueNavigation,
+                          ))
                   ]);
                 } else {
                   return Center(

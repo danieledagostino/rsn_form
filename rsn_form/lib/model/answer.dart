@@ -14,4 +14,9 @@ class Answer {
     this.question = map['question'];
     this.value = map['value'];
   }
+
+  @override
+  String toString() {
+    return "[step: $step, question: $question, value: $value]";
+  }
 }
