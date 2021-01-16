@@ -30,7 +30,6 @@ abstract class SuperWidget extends StatelessWidget {
         future: dao.findByStep(this.step),
         builder: (BuildContext context, AsyncSnapshot<List<Answer>> snapshot) {
           list = getInitialWidgetList();
-          debugPrint(snapshot.toString());
           if (snapshot.hasData) {
             if (snapshot.data.isNotEmpty) {
               list.add(getFormWidget(snapshot.data.first.value));
