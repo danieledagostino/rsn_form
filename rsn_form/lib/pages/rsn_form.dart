@@ -15,6 +15,7 @@ import 'package:rsn_form/form_widget/short_text_field.dart';
 import 'package:rsn_form/json/json_step.dart';
 import 'package:rsn_form/model/answer.dart';
 import 'package:rsn_form/model/app_conf.dart';
+import 'package:rsn_form/pages/rsn_stepper.dart';
 import 'package:rsn_form/utility/gsheet_utils.dart';
 import 'package:rsn_form/utility/make_step.dart';
 import 'package:rsn_form/utility/notify.dart';
@@ -104,6 +105,8 @@ class _RsnFormState extends State<RsnForm> {
           showAlert('Form submitted', 'Thanks to have shared your experience');
           GetIt.I.get<IAppConfDao>().setAlarm(formSubmitted: true);
           _dao.deleteAll();
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => RsnStepper()));
         } else {
           showDialog(
               context: context,
