@@ -6,8 +6,8 @@ class RsnRadioField extends SuperWidget {
   final Map<String, String> values;
   ValueNotifier<String> selectedValue = ValueNotifier<String>('');
 
-  RsnRadioField({int step, String question, @required this.values})
-      : super(step, question);
+  RsnRadioField(int step, String title, String question, @required this.values)
+      : super(step, title, question);
 
   @override
   Widget getFormWidget(String value) {
@@ -32,6 +32,6 @@ class RsnRadioField extends SuperWidget {
 
   void update(String value) {
     selectedValue.value = value;
-    dao.insertOrUpdate(Answer(this.step, this.question, value));
+    dao.insertOrUpdate(Answer(this.step, this.title, this.question, value));
   }
 }

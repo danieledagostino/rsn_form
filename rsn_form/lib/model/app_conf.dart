@@ -1,6 +1,6 @@
 class AppConf {
   String key;
-  String value;
+  dynamic value;
 
   AppConf(this.key, this.value);
 

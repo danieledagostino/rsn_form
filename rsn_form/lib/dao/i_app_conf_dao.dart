@@ -15,4 +15,6 @@ abstract class IAppConfDao {
   Future delete(AppConf a);
 
   Future deleteAll();
+
+  void setAlarm({bool formSubmitted});
 }

@@ -3,8 +3,8 @@ import 'package:rsn_form/form_widget/super_widget.dart';
 import 'package:rsn_form/model/answer.dart';
 
 class RsnShortTextField extends SuperWidget {
-  RsnShortTextField({@required int step, String question})
-      : super(step, question);
+  RsnShortTextField(int step, String title, String question)
+      : super(step, title, question);
   TextEditingController controller = TextEditingController();
 
   @override

@@ -53,7 +53,8 @@ class Notify {
   }
 
   void show() async {
-    await notifications('Fill form', 'Please rember to fill and sent the form');
+    await notifications(
+        'Rsn feedback form', 'Please remember to fill and send the form');
   }
 
   Future<void> notifications(String title, String body) async {

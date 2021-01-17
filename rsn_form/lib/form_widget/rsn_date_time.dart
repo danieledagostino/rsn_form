@@ -7,7 +7,8 @@ import 'package:rsn_form/model/answer.dart';
 class RsnDateTimeField extends SuperWidget {
   ValueNotifier<DateTime> selectedDate = ValueNotifier(DateTime.now());
 
-  RsnDateTimeField({int step, String question}) : super(step, question);
+  RsnDateTimeField(int step, String title, String question)
+      : super(step, title, question);
 
   @override
   Widget getFormWidget(String value) {
@@ -28,6 +29,7 @@ class RsnDateTimeField extends SuperWidget {
 
   void update(DateTime date) {
     selectedDate.value = date;
-    dao.insertOrUpdate(Answer(this.step, this.question, date.toString()));
+    dao.insertOrUpdate(
+        Answer(this.step, this.title, this.question, date.toString()));
   }
 }

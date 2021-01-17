@@ -8,12 +8,13 @@ import 'package:test/test.dart';
 void main() {
   test('dao insert and read', () async {
     int step = 432432;
+    String title = "Title test";
     String questionTest = 'Question test 1';
 
     AnswerDao dao = AnswerDao();
     dao.deleteAll();
 
-    Answer toInsert = Answer(step, questionTest, 'Response 1');
+    Answer toInsert = Answer(step, title, questionTest, 'Response 1');
 
     Future res = await dao.insert(toInsert);
     res.then((value) => {expect(true, value > 0)});

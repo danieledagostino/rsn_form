@@ -6,9 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rsn_form/dao/answer_dao.dart';
 import 'package:rsn_form/dao/i_answer_dao.dart';
+import 'package:rsn_form/dao/i_app_conf_dao.dart';
+import 'package:rsn_form/form_widget/date_field.dart';
+import 'package:rsn_form/form_widget/full_text_field.dart';
+import 'package:rsn_form/form_widget/radio_form.dart';
+import 'package:rsn_form/form_widget/rsn_date_time.dart';
 import 'package:rsn_form/form_widget/short_text_field.dart';
 import 'package:rsn_form/json/json_step.dart';
 import 'package:rsn_form/model/answer.dart';
+import 'package:rsn_form/model/app_conf.dart';
 import 'package:rsn_form/utility/gsheet_utils.dart';
 import 'package:rsn_form/utility/make_step.dart';
 import 'package:rsn_form/utility/notify.dart';
@@ -39,13 +45,7 @@ class _RsnFormState extends State<RsnForm> {
     _dao = GetIt.I.get();
     makeStep = MakeStep(widget.jsonSteps);
     AndroidAlarmManager.initialize();
-    init();
-  }
-
-  void init() async {
-    await AndroidAlarmManager.periodic(const Duration(seconds: 10),
-        Random().nextInt(pow(2, 31)), Notify.setAlarm,
-        exact: true, wakeup: true, rescheduleOnReboot: true);
+    GetIt.I.get<IAppConfDao>().setAlarm();
   }
 
   @override
@@ -100,17 +100,25 @@ class _RsnFormState extends State<RsnForm> {
 
     _dao.findAll().then((List<Answer> list) {
       gsheet.sendData(list).then((Response res) {
-        if (res.statusCode == GsheetUtils.STATUS_SUCCESS) {
+        if (res.statusCode == 200) {
           showAlert('Form submitted', 'Thanks to have shared your experience');
+          GetIt.I.get<IAppConfDao>().setAlarm(formSubmitted: true);
           _dao.deleteAll();
         } else {
-          stderr.writeln(
-              "Got some errors. Status code: " + res.statusCode.toString());
-          showAlert('Form not submitted',
-              'Oh no! Some issues occurred. Please retry');
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              });
         }
-      }).catchError((e) => showAlert(
-          'Form not submitted', 'Oh no! Some issues occurred. Please retry'));
+      }).catchError((e) {
+        stderr.writeln("Got some errors. Status code: " + e.toString());
+        showAlert(
+            'Form not submitted', 'Oh no! Some issues occurred. Please retry');
+      });
     });
   }
 
@@ -128,19 +136,28 @@ class _RsnFormState extends State<RsnForm> {
   void saveData() {
     Column col = steps[currentStep].content;
     col.children.forEach((e) {
-      if (e is RsnShortTextField) {
+      if ((e is RsnShortTextField) | (e is RsnFullTextField)) {
         RsnShortTextField field = e;
-        _answer = Answer(field.step, field.question, field.controller.text);
+        _answer = Answer(
+            field.step, field.title, field.question, field.controller.text);
         _dao.insertOrUpdate(_answer);
-      }
+      } else if ((e is RsnDateField) | (e is RsnDateTimeField)) {
+      } else if (e is RsnRadioField) {}
     });
   }
 
   void next() {
     saveData();
     //Provider.of<DateField>(context).update(null);
+    if (currentStep + 1 < steps.length) {
+      Column col = steps[currentStep + 1].content;
+      col.children.forEach((e) {
+        if (!((e is RsnShortTextField) | (e is RsnFullTextField))) {
+          FocusScope.of(context).unfocus();
+        }
+      });
+    }
     goTo(currentStep + 1);
-    FocusScope.of(context).unfocus();
   }
 
   void cancel() {

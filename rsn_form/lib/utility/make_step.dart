@@ -96,20 +96,18 @@ class MakeStep {
 
     if (jsonStep.answerType == AnswerType.full) {
       field.add(
-          RsnFullTextField(step: jsonStep.step, question: jsonStep.question));
+          RsnFullTextField(jsonStep.step, jsonStep.title, jsonStep.question));
     } else if (jsonStep.answerType == AnswerType.short) {
       field.add(
-          RsnShortTextField(step: jsonStep.step, question: jsonStep.question));
+          RsnShortTextField(jsonStep.step, jsonStep.title, jsonStep.question));
     } else if (jsonStep.answerType == AnswerType.radio) {
-      field.add(RsnRadioField(
-          step: jsonStep.step,
-          question: jsonStep.question,
-          values: jsonStep.possibileAnswers));
+      field.add(RsnRadioField(jsonStep.step, jsonStep.title, jsonStep.question,
+          jsonStep.possibileAnswers));
     } else if (jsonStep.answerType == AnswerType.date) {
-      field.add(RsnDateField(step: jsonStep.step, question: jsonStep.question));
+      field.add(RsnDateField(jsonStep.step, jsonStep.title, jsonStep.question));
     } else if (jsonStep.answerType == AnswerType.datetime) {
       field.add(
-          RsnDateTimeField(step: jsonStep.step, question: jsonStep.question));
+          RsnDateTimeField(jsonStep.step, jsonStep.title, jsonStep.question));
     }
     /*
     else if (jsonStep.answerType == AnswerType.check) {

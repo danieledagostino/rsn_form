@@ -25,8 +25,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    GetIt.I.registerSingleton(navKey, instanceName: 'homePageNavKey');
-
     return MaterialApp(
         title: 'RSN Mentoring Feedback',
         theme: ThemeData(
