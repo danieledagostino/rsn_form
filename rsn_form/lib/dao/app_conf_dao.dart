@@ -103,7 +103,7 @@ class AppConfDao extends IAppConfDao {
     await AndroidAlarmManager.oneShot(d, alarmKey, Notify.setAlarm,
             exact: true, wakeup: true, rescheduleOnReboot: true)
         .then((value) {
-      insert(AppConf('alarmKey', alarmKey));
+      insertOrUpdate(AppConf('alarmKey', alarmKey));
     });
   }
 }
