@@ -84,16 +84,6 @@ class MakeStep {
 
   List<Widget> _makeWidget(JsonStep jsonStep) {
     List<Widget> field = List<Widget>();
-    /*
-    if (dao == null) {
-      dao = AnswerDao();
-    }
-    Answer answer = Answer(0, '', '');
-    if (jsonStep.step == (currentStep + 1)) {
-      dao.findByStep(jsonStep.step).then((Answer value) => {answer = value});
-    }
-    */
-
     if (jsonStep.answerType == AnswerType.full) {
       field.add(
           RsnFullTextField(jsonStep.step, jsonStep.title, jsonStep.question));

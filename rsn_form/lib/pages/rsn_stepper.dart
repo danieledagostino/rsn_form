@@ -63,7 +63,7 @@ class _RsnStepperState extends State<RsnStepper> {
     buildContext = context;
     return new Scaffold(
         appBar: AppBar(
-          title: Text('RSN Form'),
+          title: Text('RSN disclaimer'),
         ),
         body: FutureBuilder<String>(
             future: rootBundle.loadString(join('resources', 'disclaimer.txt')),

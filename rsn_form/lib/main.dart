@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rsn_form/pages/home_menu.dart';
 import 'package:rsn_form/pages/rsn_stepper.dart';
 
 void main() async {
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'RSN Mentoring Feedback',
+        title: 'RSN',
         theme: ThemeData(
           primarySwatch: Colors.green,
           // This makes the visual density adapt to the platform that you run
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: RsnStepper(),
+        home: HomeMenu(),
         navigatorKey: navKey);
   }
 }

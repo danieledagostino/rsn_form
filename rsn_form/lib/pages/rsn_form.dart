@@ -55,7 +55,7 @@ class _RsnFormState extends State<RsnForm> {
     steps = makeStep.steps(currentStep);
     return new Scaffold(
         appBar: AppBar(
-          title: Text('RSN Form'),
+          title: Text('RSN feedback form'),
         ),
         body: Stepper(
           steps: steps,
