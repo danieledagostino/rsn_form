@@ -64,8 +64,10 @@ flutter:
   assets:
    - resources/disclaimer.txt
    - resources/hubs.json
+   - resources/background.png
    - test_resources/widget_conf.json
    - test_resources/widget_form_test.json
+   - test_resources/ig_test.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

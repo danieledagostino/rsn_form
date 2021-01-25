@@ -85,18 +85,29 @@ class AppConfDao extends IAppConfDao {
       });
     }
 
-    if (now.weekday < DateTime.friday) {
+    int alarmDay;
+
+    findByKey('alarmDay').then((value) async {
+      if (value.isNotEmpty) {
+        alarmDay = value.first.value;
+      } else {
+        insert(AppConf('alarmDay', DateTime.friday));
+        alarmDay = DateTime.friday;
+      }
+    });
+
+    if (now.weekday < alarmDay) {
       if (formSubmitted) {
         //if today is not friday it means that I sent the form for the current week
         //I need to set the alarm for the next friday past this week
-        d = Duration(days: ((DateTime.friday - now.weekday) + 7));
+        d = Duration(days: ((alarmDay - now.weekday) + 7));
       } else {
-        d = Duration(days: DateTime.friday - now.weekday);
+        d = Duration(days: alarmDay - now.weekday);
       }
     } else {
       //if today is equal to friday or greater than (sat or sun)
       //it means I need to set alarm for the next coming friday
-      d = Duration(days: 7 - now.weekday + DateTime.friday);
+      d = Duration(days: 7 - now.weekday + alarmDay);
     }
 
     final alarmKey = Random().nextInt(pow(2, 31));

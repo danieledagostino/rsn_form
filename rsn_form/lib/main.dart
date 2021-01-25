@@ -1,11 +1,22 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rsn_form/dao/init.dart';
 import 'package:rsn_form/pages/home_menu.dart';
 import 'package:rsn_form/pages/rsn_stepper.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
+  HttpOverrides.global = new MyHttpOverrides();
 
   const bool kReleaseMode =
       bool.fromEnvironment('dart.vm.product', defaultValue: false);
@@ -35,7 +46,13 @@ class MyApp extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomeMenu(),
+        home: FutureBuilder<void>(
+            future: Init.initialize(),
+            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return HomeMenu();
+              }
+            }),
         navigatorKey: navKey);
   }
 }

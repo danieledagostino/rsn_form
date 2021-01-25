@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:rsn_form/dao/init.dart';
 import 'package:rsn_form/json/json_step.dart';
+import 'package:rsn_form/pages/rsn_app_bar.dart';
+import 'package:rsn_form/pages/rsn_drawer.dart';
 import 'package:rsn_form/pages/rsn_form.dart';
 import 'package:rsn_form/utility/make_step.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -62,9 +64,7 @@ class _RsnStepperState extends State<RsnStepper> {
   Widget build(BuildContext context) {
     buildContext = context;
     return new Scaffold(
-        appBar: AppBar(
-          title: Text('RSN disclaimer'),
-        ),
+        appBar: RsnAppBar('RSN disclaimer'),
         body: FutureBuilder<String>(
             future: rootBundle.loadString(join('resources', 'disclaimer.txt')),
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {

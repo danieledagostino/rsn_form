@@ -14,11 +14,9 @@ import 'package:rsn_form/form_widget/rsn_date_time.dart';
 import 'package:rsn_form/form_widget/short_text_field.dart';
 import 'package:rsn_form/json/json_step.dart';
 import 'package:rsn_form/model/answer.dart';
-import 'package:rsn_form/model/app_conf.dart';
 import 'package:rsn_form/pages/rsn_stepper.dart';
 import 'package:rsn_form/utility/gsheet_utils.dart';
 import 'package:rsn_form/utility/make_step.dart';
-import 'package:rsn_form/utility/notify.dart';
 import 'package:http/http.dart';
 
 class RsnForm extends StatefulWidget {
