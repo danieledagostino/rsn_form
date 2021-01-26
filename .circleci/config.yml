@@ -1,10 +1,12 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/flutter-prj/rsn_form
     docker:
       - image: cirrusci/flutter
     steps:
+      - checkout:
+          path: ~/flutter-prj
       - checkout
-      - run: cd rsn_form
       - run: flutter doctor
       - run: flutter -v build apk
