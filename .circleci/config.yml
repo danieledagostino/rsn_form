@@ -7,6 +7,5 @@ jobs:
     steps:
       - checkout:
           path: ~/flutter-prj
-      - checkout
       - run: flutter doctor
       - run: flutter -v build apk
