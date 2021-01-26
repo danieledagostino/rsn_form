@@ -8,8 +8,12 @@ import 'package:rsn_form/pages/rsn_settings.dart';
 import 'package:rsn_form/pages/rsn_stepper.dart';
 
 class RsnDrawer extends StatelessWidget {
+  String _noHubMsg = 'no hub selected yet';
+
   @override
   Widget build(BuildContext context) {
+    TextStyle fontStyle = TextStyle(
+        fontSize: 20, color: Colors.brown, fontWeight: FontWeight.bold);
     return Drawer(
         child: FutureBuilder<String>(
             future: _getHub(),
@@ -17,23 +21,30 @@ class RsnDrawer extends StatelessWidget {
               if (a.hasData) {
                 return ListView(children: <Widget>[
                   Container(
-                    color: Colors.green,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("resources/thankyou.jpg"),
+                          fit: BoxFit.fill),
+                    ),
                     height: 80.0,
                     child: Padding(
                       padding: EdgeInsets.all(10.0),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: DrawerHeader(
-                          margin: EdgeInsets.all(0.0),
-                          padding: EdgeInsets.all(0.0),
-                          child: Column(children: [
-                            Text("Jhon Smith"),
-                            Text(a.data),
-                          ]),
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                          ),
-                        ),
+                      child: DrawerHeader(
+                        margin: EdgeInsets.all(0.0),
+                        padding: EdgeInsets.all(0.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            verticalDirection: VerticalDirection.down,
+                            children: [
+                              Text(
+                                "Jhon Smith",
+                                style: fontStyle,
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(a.data,
+                                  style: fontStyle, textAlign: TextAlign.left),
+                            ]),
                       ),
                     ),
                   ),
@@ -45,18 +56,23 @@ class RsnDrawer extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => RsnSettings()));
-                      //Navigator.pop(context);
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.add_chart),
                     title: Text('Feedback form'),
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RsnStepper()));
-                      //Navigator.pop(context);
+                      if (a.data != _noHubMsg) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RsnStepper()));
+                      } else {
+                        Navigator.pop(context);
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                'Please select your Hub in settings first!')));
+                      }
                     },
                   ),
                   ListTile(
@@ -64,6 +80,8 @@ class RsnDrawer extends StatelessWidget {
                     title: Text('Calendar'),
                     onTap: () {
                       Navigator.pop(context);
+                      Scaffold.of(context).showSnackBar(
+                          SnackBar(content: Text('Not implemented yet!')));
                     },
                   ),
                   ListTile(
@@ -71,6 +89,8 @@ class RsnDrawer extends StatelessWidget {
                     title: Text('Security number'),
                     onTap: () {
                       Navigator.pop(context);
+                      Scaffold.of(context).showSnackBar(
+                          SnackBar(content: Text('Not implemented yet!')));
                     },
                   ),
                 ]);
@@ -86,7 +106,7 @@ class RsnDrawer extends StatelessWidget {
       Hub h = list[0].value as Hub;
       return h.name + ' hub';
     } else {
-      return 'no hub selected yet';
+      return _noHubMsg;
     }
   }
 }
