@@ -17,7 +17,7 @@ class HubDropdownlist extends StatelessWidget {
         hubs = json.decode(value).map<Hub>((v) {
           return Hub.fromMap(v);
         }).toList();
-      } else if (key == 'ownHub') {
+      } else if (key == 'ownHub' && !(value is String)) {
         Hub h = value as Hub;
         selectedValue.value = h.key.toString();
       }

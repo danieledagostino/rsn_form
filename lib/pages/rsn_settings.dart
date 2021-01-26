@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rsn_form/dao/i_app_conf_dao.dart';
-import 'package:rsn_form/model/hub.dart';
 import 'package:rsn_form/widget/hub_dropdownlist.dart';
 import 'package:path/path.dart';
 
@@ -47,6 +46,10 @@ class _RsnSettingsState extends State<RsnSettings> {
                 children: [
                   HubDropdownlist(map),
                 ]);
+          } else {
+            return Center(
+              child: Text('Loading...'),
+            );
           }
         });
   }

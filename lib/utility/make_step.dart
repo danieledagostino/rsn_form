@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path/path.dart';
 
-import 'package:rsn_form/.env.dart';
+import 'package:rsn_form/environment_config.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:rsn_form/form_widget/date_field.dart';
@@ -39,7 +39,7 @@ class MakeStep {
         throw ('file not found');
       });
     } else {
-      final String url = rsn_env['JSON_FORM_CONF'];
+      final String url = EnvironmentConfig.JSON_FORM_CONF;
       print('sto passando da qua: ' + url);
       var res = await http.get(url).catchError((e) {
         stderr.writeln('Exception during widget_conf.json\n' + e.toString());

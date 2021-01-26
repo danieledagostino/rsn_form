@@ -6,13 +6,13 @@ import 'package:rsn_form/utility/gsheet_utils.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:path/path.dart';
-import 'package:rsn_form/.env.dart';
+import 'package:rsn_form/environment_config.dart';
 
 void main() {
   //TestWidgetsFlutterBinding.ensureInitialized();
 
   test('sendData to Google spreadsheet', () async {
-    String URL = rsn_env['GSHEET_URL'];
+    String URL = EnvironmentConfig.GSHEET_URL;
     Map jsonAnswers = {
       "step1": "Kevin2",
       "step2": "Mohammad2",
