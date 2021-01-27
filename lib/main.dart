@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rsn_form/dao/init.dart';
 import 'package:rsn_form/pages/home_menu.dart';
@@ -15,9 +16,6 @@ class MyHttpOverrides extends HttpOverrides {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
   HttpOverrides.global = new MyHttpOverrides();
-
-  const bool kReleaseMode =
-      bool.fromEnvironment('dart.vm.product', defaultValue: false);
 
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.dumpErrorToConsole(details);

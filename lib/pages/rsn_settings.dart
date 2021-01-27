@@ -1,11 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
-import 'package:rsn_form/dao/i_app_conf_dao.dart';
 import 'package:rsn_form/widget/hub_dropdownlist.dart';
-import 'package:path/path.dart';
 
 class RsnSettings extends StatefulWidget {
   @override
@@ -13,12 +7,11 @@ class RsnSettings extends StatefulWidget {
 }
 
 class _RsnSettingsState extends State<RsnSettings> {
-  var map;
-  var _resources;
+  HubDropdownlist _hubList;
 
   @override
   void initState() {
-    _resources = _getResources();
+    _hubList = HubDropdownlist();
   }
 
   @override
@@ -32,48 +25,16 @@ class _RsnSettingsState extends State<RsnSettings> {
                 tabs: [
                   Tab(icon: Icon(Icons.home)),
                   Tab(icon: Icon(Icons.account_box)),
+                  //Tab(icon: Icon(Icons.alarm_sharp)),
                 ],
               ),
             ),
             body: TabBarView(
-              children: [_getHubs(), Text('Test')],
+              children: [
+                _hubList,
+                Center(child: Text('Not implemented yet')),
+                //Center(child: Text('Not implemented yet'))
+              ],
             )));
-  }
-
-  FutureBuilder<void> _getHubs() {
-    return FutureBuilder<void>(
-        future: _resources,
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  HubDropdownlist(map),
-                ]);
-          } else {
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.lightBlueAccent,
-              ),
-            );
-          }
-        });
-  }
-
-  Future<bool> _getResources() async {
-    bool resp = false;
-    map = Map<String, dynamic>();
-    IAppConfDao dao = GetIt.I.get<IAppConfDao>();
-    var hubs = await rootBundle.loadString(join('resources', 'hubs.json'));
-    await dao.findByKey('ownHub').then((value) {
-      if (value != null && value.isNotEmpty) {
-        map['ownHub'] = value[0].value;
-      } else {
-        map['ownHub'] = '';
-      }
-    });
-    map['hubs'] = hubs;
   }
 }

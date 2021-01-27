@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:date_field/date_field.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -28,9 +31,9 @@ class MakeStep {
 
   MakeStep(this.jsonSteps);
 
-  static Future<List<JsonStep>> getResources({bool isDebug: false}) async {
+  static Future<List<JsonStep>> getResources() async {
     String jsonContent;
-    if (isDebug) {
+    if (kDebugMode) {
       await rootBundle
           .loadString(join('test_resources', 'widget_conf.json'))
           .then((value) => jsonContent = value)
@@ -40,15 +43,16 @@ class MakeStep {
       });
     } else {
       final String url = EnvironmentConfig.JSON_FORM_CONF;
-      print('sto passando da qua: ' + url);
-      var res = await http.get(url).catchError((e) {
-        stderr.writeln('Exception during widget_conf.json\n' + e.toString());
+      print(url);
+      var res =
+          await http.get(url).timeout(Duration(seconds: 20)).catchError((e) {
+        log('Exception while getting widget_conf.json', error: e);
       });
       if (res.statusCode == 200) {
         jsonContent = res.body;
       } else {
         stderr.writeln('resource not available: ' + res.statusCode.toString());
-        exit(1);
+        jsonContent = 'Http error: $res.statusCode';
       }
     }
 

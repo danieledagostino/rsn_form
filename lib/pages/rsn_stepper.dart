@@ -27,7 +27,7 @@ class _RsnStepperState extends State<RsnStepper> {
   void initState() {
     super.initState();
     _infoText = 'Form loading...';
-    MakeStep.getResources(isDebug: kDebugMode)
+    MakeStep.getResources()
         .then((value) => {
               setState(() {
                 _isButtonDisabled = false;

@@ -52,6 +52,7 @@ class RsnDrawer extends StatelessWidget {
                     leading: Icon(Icons.settings),
                     title: Text('Settings'),
                     onTap: () {
+                      Navigator.pop(context);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -63,6 +64,7 @@ class RsnDrawer extends StatelessWidget {
                     title: Text('Feedback form'),
                     onTap: () {
                       if (a.data != _noHubMsg) {
+                        Navigator.pop(context);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -86,7 +88,7 @@ class RsnDrawer extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.phone),
-                    title: Text('Security number'),
+                    title: Text('Safeguarding number'),
                     onTap: () {
                       Navigator.pop(context);
                       Scaffold.of(context).showSnackBar(

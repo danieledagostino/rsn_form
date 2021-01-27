@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -9,12 +10,6 @@ import 'dart:io';
 import 'package:path/path.dart';
 
 class RsnFeedWidget extends StatelessWidget {
-  bool _isDebug;
-
-  RsnFeedWidget() {
-    _isDebug = bool.fromEnvironment('dart.vm.product', defaultValue: false);
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
@@ -30,7 +25,8 @@ class RsnFeedWidget extends StatelessWidget {
               scrollDirection: Axis.vertical,
               child: Column(
                 children: jsonData
-                    .map<Widget>((e) => _getCard(PostModel.fromData(e)))
+                    .map<Widget>(
+                        (e) => _getCard(PostModel.fromData(e), context))
                     .toList(),
               ),
             );
@@ -42,32 +38,50 @@ class RsnFeedWidget extends StatelessWidget {
         });
   }
 
-  SingleChildScrollView _getCard(PostModel model) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Card(
-          child: InkWell(
-              onTap: () => {},
-              child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                Image.network(
-                  model.imageUrl,
-                  width: 100,
-                  height: 100,
-                  errorBuilder: (context, error, stackTrace) {
-                    log('error while loading url', error: error);
-                    return Icon(Icons.details);
-                  },
-                ),
-                Text(model.description, style: TextStyle(color: Colors.black)),
-                const SizedBox(width: 8),
-              ]))),
-    );
+  InkWell _getCard(PostModel model, BuildContext ctx) {
+    return InkWell(
+        onTap: () => {},
+        child: Container(
+          margin: EdgeInsets.all(5.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(color: Colors.green, spreadRadius: 1),
+            ],
+          ),
+          padding: const EdgeInsets.all(10.0),
+          width: MediaQuery.of(ctx).size.width,
+          child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(right: 5.0),
+              child: Image.network(
+                model.imageUrl,
+                width: 80,
+                height: 80,
+                errorBuilder: (context, error, stackTrace) {
+                  log('error while loading image url in feeds');
+                  return Icon(Icons.details);
+                },
+              ),
+            ),
+            Flexible(
+              child: Text(
+                model.description,
+                style: TextStyle(color: Colors.black),
+                overflow: TextOverflow.fade,
+                softWrap: true,
+                maxLines: 4,
+              ),
+            ),
+          ]),
+        ));
   }
 
   Future<String> _getResources() async {
     var jsonContent;
     var url = 'https://www.instagram.com/rsn_uk/?__a=1';
-    if (_isDebug) {
+    if (kDebugMode) {
       await rootBundle
           .loadString(join('test_resources', 'ig_test.json'))
           .then((value) => jsonContent = value)
