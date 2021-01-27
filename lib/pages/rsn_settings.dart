@@ -14,6 +14,12 @@ class RsnSettings extends StatefulWidget {
 
 class _RsnSettingsState extends State<RsnSettings> {
   var map;
+  var _resources;
+
+  @override
+  void initState() {
+    _resources = _getResources();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,7 @@ class _RsnSettingsState extends State<RsnSettings> {
 
   FutureBuilder<void> _getHubs() {
     return FutureBuilder<void>(
-        future: getResources(),
+        future: _resources,
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Column(
@@ -48,13 +54,16 @@ class _RsnSettingsState extends State<RsnSettings> {
                 ]);
           } else {
             return Center(
-              child: Text('Loading...'),
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.lightBlueAccent,
+              ),
             );
           }
         });
   }
 
-  Future<void> getResources() async {
+  Future<bool> _getResources() async {
+    bool resp = false;
     map = Map<String, dynamic>();
     IAppConfDao dao = GetIt.I.get<IAppConfDao>();
     var hubs = await rootBundle.loadString(join('resources', 'hubs.json'));

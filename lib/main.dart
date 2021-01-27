@@ -32,6 +32,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   final navKey = new GlobalKey<NavigatorState>();
+  Future<bool> _storeInit = Init.initialize();
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +45,28 @@ class MyApp extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: FutureBuilder<void>(
-            future: Init.initialize(),
-            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+        home: FutureBuilder<bool>(
+            future: _storeInit,
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return HomeMenu();
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.lightBlueAccent,
+                  ),
+                );
+              } else {
+                if (snapshot.hasError) {
+                  return Container(
+                    child: Column(
+                      children: [
+                        Text('Errors has occurred'),
+                        Text(snapshot.error)
+                      ],
+                    ),
+                  );
+                }
               }
             }),
         navigatorKey: navKey);

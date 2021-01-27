@@ -20,6 +20,7 @@ class RsnFeedWidget extends StatelessWidget {
     return FutureBuilder<String>(
         future: _getResources(),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          //if connectionstate.done
           if (snapshot.hasData) {
             log('data loaded', level: 2);
             var jsonData = jsonDecode(snapshot.data);

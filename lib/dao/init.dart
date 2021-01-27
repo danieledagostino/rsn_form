@@ -10,9 +10,10 @@ import 'package:rsn_form/dao/i_app_conf_dao.dart';
 import 'package:rsn_form/dao/app_conf_dao.dart';
 
 class Init {
-  static Future initialize() async {
+  static Future<bool> initialize() async {
     await _initSembast();
     _registerRepositories();
+    return true;
   }
 
   static Future _initSembast() async {
