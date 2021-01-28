@@ -52,8 +52,15 @@ class HubDropdownlist extends StatelessWidget {
       list.add(ValueListenableBuilder(
           valueListenable: selectedValue,
           builder: (BuildContext context, String newSelect, Widget child) {
+            Text text;
+            if (e.key.toString() == selectedValue.value) {
+              text =
+                  Text(e.name, style: TextStyle(fontWeight: FontWeight.bold));
+            } else {
+              text = Text(e.name);
+            }
             return RadioListTile(
-                title: Text(e.name),
+                title: text,
                 groupValue: newSelect,
                 onChanged: (v) => update(v),
                 value: e.key.toString());

@@ -87,32 +87,35 @@ class AppConfDao extends IAppConfDao {
 
     int alarmDay;
 
-    findByKey('alarmDay').then((value) async {
-      if (value.isNotEmpty) {
-        alarmDay = value.first.value;
-      } else {
-        insert(AppConf('alarmDay', DateTime.friday));
-        alarmDay = DateTime.friday;
-      }
-    });
+    //get the set alarmDay from the settings
+    List<AppConf> conf = await findByKey('alarmDay');
+    if (conf.isNotEmpty) {
+      alarmDay = conf.first.value;
+    } else {
+      insertOrUpdate(AppConf('alarmDay', DateTime.friday));
+      alarmDay = DateTime.friday;
+    }
 
-    if (now.weekday < alarmDay) {
+    if (now.weekday <= alarmDay) {
       if (formSubmitted) {
         //if today is not friday it means that I sent the form for the current week
         //I need to set the alarm for the next friday past this week
-        d = Duration(days: ((alarmDay - now.weekday) + 7));
+        d = Duration(days: ((alarmDay - now.weekday) + 7), minutes: 5);
       } else {
-        d = Duration(days: alarmDay - now.weekday);
+        d = Duration(days: alarmDay - now.weekday, minutes: 5);
       }
     } else {
       //if today is equal to friday or greater than (sat or sun)
       //it means I need to set alarm for the next coming friday
-      d = Duration(days: 7 - now.weekday + alarmDay);
+      d = Duration(days: 7 - now.weekday + alarmDay, minutes: 5);
     }
 
     final alarmKey = Random().nextInt(pow(2, 31));
     await AndroidAlarmManager.oneShot(d, alarmKey, Notify.setAlarm,
-            exact: true, wakeup: true, rescheduleOnReboot: true)
+            exact: true,
+            wakeup: true,
+            rescheduleOnReboot: true,
+            alarmClock: true)
         .then((value) {
       insertOrUpdate(AppConf('alarmKey', alarmKey));
     });

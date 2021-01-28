@@ -43,8 +43,6 @@ class _RsnFormState extends State<RsnForm> {
     super.initState();
     _dao = GetIt.I.get();
     makeStep = MakeStep(widget.jsonSteps);
-    AndroidAlarmManager.initialize();
-    GetIt.I.get<IAppConfDao>().setAlarm();
   }
 
   @override

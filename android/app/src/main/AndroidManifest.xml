@@ -12,6 +12,9 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="RSN"
         android:icon="@mipmap/ic_launcher">
+		<meta-data
+			android:name="com.google.firebase.messaging.default_notification_color"
+			android:resource="@drawable/app_icon" />
         <service
             android:name="io.flutter.plugins.androidalarmmanager.AlarmService"
             android:permission="android.permission.BIND_JOB_SERVICE"
