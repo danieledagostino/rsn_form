@@ -100,14 +100,14 @@ class AppConfDao extends IAppConfDao {
       if (formSubmitted) {
         //if today is not friday it means that I sent the form for the current week
         //I need to set the alarm for the next friday past this week
-        d = Duration(days: ((alarmDay - now.weekday) + 7), minutes: 5);
+        d = Duration(days: ((alarmDay - now.weekday) + 7), minutes: 1);
       } else {
-        d = Duration(days: alarmDay - now.weekday, minutes: 5);
+        d = Duration(days: alarmDay - now.weekday, minutes: 1);
       }
     } else {
       //if today is equal to friday or greater than (sat or sun)
       //it means I need to set alarm for the next coming friday
-      d = Duration(days: 7 - now.weekday + alarmDay, minutes: 5);
+      d = Duration(days: 7 - now.weekday + alarmDay, minutes: 1);
     }
 
     final alarmKey = Random().nextInt(pow(2, 31));
